@@ -1,0 +1,1 @@
+enum OsType { iOS, Android }

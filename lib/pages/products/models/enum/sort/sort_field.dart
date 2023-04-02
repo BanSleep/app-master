@@ -1,0 +1,1 @@
+enum SortField { price, popularity }

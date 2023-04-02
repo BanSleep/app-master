@@ -1,0 +1,7 @@
+.idea/
+build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.DS_Store
