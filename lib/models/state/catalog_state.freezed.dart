@@ -25,6 +25,8 @@ mixin _$CatalogState {
         searchProducts,
     required TResult Function() emptyData,
     required TResult Function(String? text) error,
+    required TResult Function(SuggestionsResponse data) suggestionsByText,
+    required TResult Function(List<dynamic> data) suggestions,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -36,6 +38,8 @@ mixin _$CatalogState {
         searchProducts,
     TResult? Function()? emptyData,
     TResult? Function(String? text)? error,
+    TResult? Function(SuggestionsResponse data)? suggestionsByText,
+    TResult? Function(List<dynamic> data)? suggestions,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -47,6 +51,8 @@ mixin _$CatalogState {
         searchProducts,
     TResult Function()? emptyData,
     TResult Function(String? text)? error,
+    TResult Function(SuggestionsResponse data)? suggestionsByText,
+    TResult Function(List<dynamic> data)? suggestions,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -57,6 +63,8 @@ mixin _$CatalogState {
     required TResult Function(_SearchProducts value) searchProducts,
     required TResult Function(_EmptyData value) emptyData,
     required TResult Function(_Error value) error,
+    required TResult Function(_SuggestionsByText value) suggestionsByText,
+    required TResult Function(_Suggestions value) suggestions,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -66,6 +74,8 @@ mixin _$CatalogState {
     TResult? Function(_SearchProducts value)? searchProducts,
     TResult? Function(_EmptyData value)? emptyData,
     TResult? Function(_Error value)? error,
+    TResult? Function(_SuggestionsByText value)? suggestionsByText,
+    TResult? Function(_Suggestions value)? suggestions,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -75,6 +85,8 @@ mixin _$CatalogState {
     TResult Function(_SearchProducts value)? searchProducts,
     TResult Function(_EmptyData value)? emptyData,
     TResult Function(_Error value)? error,
+    TResult Function(_SuggestionsByText value)? suggestionsByText,
+    TResult Function(_Suggestions value)? suggestions,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -143,6 +155,8 @@ class _$_Initializing implements _Initializing {
         searchProducts,
     required TResult Function() emptyData,
     required TResult Function(String? text) error,
+    required TResult Function(SuggestionsResponse data) suggestionsByText,
+    required TResult Function(List<dynamic> data) suggestions,
   }) {
     return initializing();
   }
@@ -157,6 +171,8 @@ class _$_Initializing implements _Initializing {
         searchProducts,
     TResult? Function()? emptyData,
     TResult? Function(String? text)? error,
+    TResult? Function(SuggestionsResponse data)? suggestionsByText,
+    TResult? Function(List<dynamic> data)? suggestions,
   }) {
     return initializing?.call();
   }
@@ -171,6 +187,8 @@ class _$_Initializing implements _Initializing {
         searchProducts,
     TResult Function()? emptyData,
     TResult Function(String? text)? error,
+    TResult Function(SuggestionsResponse data)? suggestionsByText,
+    TResult Function(List<dynamic> data)? suggestions,
     required TResult orElse(),
   }) {
     if (initializing != null) {
@@ -187,6 +205,8 @@ class _$_Initializing implements _Initializing {
     required TResult Function(_SearchProducts value) searchProducts,
     required TResult Function(_EmptyData value) emptyData,
     required TResult Function(_Error value) error,
+    required TResult Function(_SuggestionsByText value) suggestionsByText,
+    required TResult Function(_Suggestions value) suggestions,
   }) {
     return initializing(this);
   }
@@ -199,6 +219,8 @@ class _$_Initializing implements _Initializing {
     TResult? Function(_SearchProducts value)? searchProducts,
     TResult? Function(_EmptyData value)? emptyData,
     TResult? Function(_Error value)? error,
+    TResult? Function(_SuggestionsByText value)? suggestionsByText,
+    TResult? Function(_Suggestions value)? suggestions,
   }) {
     return initializing?.call(this);
   }
@@ -211,6 +233,8 @@ class _$_Initializing implements _Initializing {
     TResult Function(_SearchProducts value)? searchProducts,
     TResult Function(_EmptyData value)? emptyData,
     TResult Function(_Error value)? error,
+    TResult Function(_SuggestionsByText value)? suggestionsByText,
+    TResult Function(_Suggestions value)? suggestions,
     required TResult orElse(),
   }) {
     if (initializing != null) {
@@ -306,6 +330,8 @@ class _$_Loaded implements _Loaded {
         searchProducts,
     required TResult Function() emptyData,
     required TResult Function(String? text) error,
+    required TResult Function(SuggestionsResponse data) suggestionsByText,
+    required TResult Function(List<dynamic> data) suggestions,
   }) {
     return loaded(data, reg);
   }
@@ -320,6 +346,8 @@ class _$_Loaded implements _Loaded {
         searchProducts,
     TResult? Function()? emptyData,
     TResult? Function(String? text)? error,
+    TResult? Function(SuggestionsResponse data)? suggestionsByText,
+    TResult? Function(List<dynamic> data)? suggestions,
   }) {
     return loaded?.call(data, reg);
   }
@@ -334,6 +362,8 @@ class _$_Loaded implements _Loaded {
         searchProducts,
     TResult Function()? emptyData,
     TResult Function(String? text)? error,
+    TResult Function(SuggestionsResponse data)? suggestionsByText,
+    TResult Function(List<dynamic> data)? suggestions,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -350,6 +380,8 @@ class _$_Loaded implements _Loaded {
     required TResult Function(_SearchProducts value) searchProducts,
     required TResult Function(_EmptyData value) emptyData,
     required TResult Function(_Error value) error,
+    required TResult Function(_SuggestionsByText value) suggestionsByText,
+    required TResult Function(_Suggestions value) suggestions,
   }) {
     return loaded(this);
   }
@@ -362,6 +394,8 @@ class _$_Loaded implements _Loaded {
     TResult? Function(_SearchProducts value)? searchProducts,
     TResult? Function(_EmptyData value)? emptyData,
     TResult? Function(_Error value)? error,
+    TResult? Function(_SuggestionsByText value)? suggestionsByText,
+    TResult? Function(_Suggestions value)? suggestions,
   }) {
     return loaded?.call(this);
   }
@@ -374,6 +408,8 @@ class _$_Loaded implements _Loaded {
     TResult Function(_SearchProducts value)? searchProducts,
     TResult Function(_EmptyData value)? emptyData,
     TResult Function(_Error value)? error,
+    TResult Function(_SuggestionsByText value)? suggestionsByText,
+    TResult Function(_Suggestions value)? suggestions,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -491,6 +527,8 @@ class _$_SearchProducts implements _SearchProducts {
         searchProducts,
     required TResult Function() emptyData,
     required TResult Function(String? text) error,
+    required TResult Function(SuggestionsResponse data) suggestionsByText,
+    required TResult Function(List<dynamic> data) suggestions,
   }) {
     return searchProducts(data, items, search);
   }
@@ -505,6 +543,8 @@ class _$_SearchProducts implements _SearchProducts {
         searchProducts,
     TResult? Function()? emptyData,
     TResult? Function(String? text)? error,
+    TResult? Function(SuggestionsResponse data)? suggestionsByText,
+    TResult? Function(List<dynamic> data)? suggestions,
   }) {
     return searchProducts?.call(data, items, search);
   }
@@ -519,6 +559,8 @@ class _$_SearchProducts implements _SearchProducts {
         searchProducts,
     TResult Function()? emptyData,
     TResult Function(String? text)? error,
+    TResult Function(SuggestionsResponse data)? suggestionsByText,
+    TResult Function(List<dynamic> data)? suggestions,
     required TResult orElse(),
   }) {
     if (searchProducts != null) {
@@ -535,6 +577,8 @@ class _$_SearchProducts implements _SearchProducts {
     required TResult Function(_SearchProducts value) searchProducts,
     required TResult Function(_EmptyData value) emptyData,
     required TResult Function(_Error value) error,
+    required TResult Function(_SuggestionsByText value) suggestionsByText,
+    required TResult Function(_Suggestions value) suggestions,
   }) {
     return searchProducts(this);
   }
@@ -547,6 +591,8 @@ class _$_SearchProducts implements _SearchProducts {
     TResult? Function(_SearchProducts value)? searchProducts,
     TResult? Function(_EmptyData value)? emptyData,
     TResult? Function(_Error value)? error,
+    TResult? Function(_SuggestionsByText value)? suggestionsByText,
+    TResult? Function(_Suggestions value)? suggestions,
   }) {
     return searchProducts?.call(this);
   }
@@ -559,6 +605,8 @@ class _$_SearchProducts implements _SearchProducts {
     TResult Function(_SearchProducts value)? searchProducts,
     TResult Function(_EmptyData value)? emptyData,
     TResult Function(_Error value)? error,
+    TResult Function(_SuggestionsByText value)? suggestionsByText,
+    TResult Function(_Suggestions value)? suggestions,
     required TResult orElse(),
   }) {
     if (searchProducts != null) {
@@ -625,6 +673,8 @@ class _$_EmptyData implements _EmptyData {
         searchProducts,
     required TResult Function() emptyData,
     required TResult Function(String? text) error,
+    required TResult Function(SuggestionsResponse data) suggestionsByText,
+    required TResult Function(List<dynamic> data) suggestions,
   }) {
     return emptyData();
   }
@@ -639,6 +689,8 @@ class _$_EmptyData implements _EmptyData {
         searchProducts,
     TResult? Function()? emptyData,
     TResult? Function(String? text)? error,
+    TResult? Function(SuggestionsResponse data)? suggestionsByText,
+    TResult? Function(List<dynamic> data)? suggestions,
   }) {
     return emptyData?.call();
   }
@@ -653,6 +705,8 @@ class _$_EmptyData implements _EmptyData {
         searchProducts,
     TResult Function()? emptyData,
     TResult Function(String? text)? error,
+    TResult Function(SuggestionsResponse data)? suggestionsByText,
+    TResult Function(List<dynamic> data)? suggestions,
     required TResult orElse(),
   }) {
     if (emptyData != null) {
@@ -669,6 +723,8 @@ class _$_EmptyData implements _EmptyData {
     required TResult Function(_SearchProducts value) searchProducts,
     required TResult Function(_EmptyData value) emptyData,
     required TResult Function(_Error value) error,
+    required TResult Function(_SuggestionsByText value) suggestionsByText,
+    required TResult Function(_Suggestions value) suggestions,
   }) {
     return emptyData(this);
   }
@@ -681,6 +737,8 @@ class _$_EmptyData implements _EmptyData {
     TResult? Function(_SearchProducts value)? searchProducts,
     TResult? Function(_EmptyData value)? emptyData,
     TResult? Function(_Error value)? error,
+    TResult? Function(_SuggestionsByText value)? suggestionsByText,
+    TResult? Function(_Suggestions value)? suggestions,
   }) {
     return emptyData?.call(this);
   }
@@ -693,6 +751,8 @@ class _$_EmptyData implements _EmptyData {
     TResult Function(_SearchProducts value)? searchProducts,
     TResult Function(_EmptyData value)? emptyData,
     TResult Function(_Error value)? error,
+    TResult Function(_SuggestionsByText value)? suggestionsByText,
+    TResult Function(_Suggestions value)? suggestions,
     required TResult orElse(),
   }) {
     if (emptyData != null) {
@@ -775,6 +835,8 @@ class _$_Error implements _Error {
         searchProducts,
     required TResult Function() emptyData,
     required TResult Function(String? text) error,
+    required TResult Function(SuggestionsResponse data) suggestionsByText,
+    required TResult Function(List<dynamic> data) suggestions,
   }) {
     return error(text);
   }
@@ -789,6 +851,8 @@ class _$_Error implements _Error {
         searchProducts,
     TResult? Function()? emptyData,
     TResult? Function(String? text)? error,
+    TResult? Function(SuggestionsResponse data)? suggestionsByText,
+    TResult? Function(List<dynamic> data)? suggestions,
   }) {
     return error?.call(text);
   }
@@ -803,6 +867,8 @@ class _$_Error implements _Error {
         searchProducts,
     TResult Function()? emptyData,
     TResult Function(String? text)? error,
+    TResult Function(SuggestionsResponse data)? suggestionsByText,
+    TResult Function(List<dynamic> data)? suggestions,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -819,6 +885,8 @@ class _$_Error implements _Error {
     required TResult Function(_SearchProducts value) searchProducts,
     required TResult Function(_EmptyData value) emptyData,
     required TResult Function(_Error value) error,
+    required TResult Function(_SuggestionsByText value) suggestionsByText,
+    required TResult Function(_Suggestions value) suggestions,
   }) {
     return error(this);
   }
@@ -831,6 +899,8 @@ class _$_Error implements _Error {
     TResult? Function(_SearchProducts value)? searchProducts,
     TResult? Function(_EmptyData value)? emptyData,
     TResult? Function(_Error value)? error,
+    TResult? Function(_SuggestionsByText value)? suggestionsByText,
+    TResult? Function(_Suggestions value)? suggestions,
   }) {
     return error?.call(this);
   }
@@ -843,6 +913,8 @@ class _$_Error implements _Error {
     TResult Function(_SearchProducts value)? searchProducts,
     TResult Function(_EmptyData value)? emptyData,
     TResult Function(_Error value)? error,
+    TResult Function(_SuggestionsByText value)? suggestionsByText,
+    TResult Function(_Suggestions value)? suggestions,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -858,5 +930,350 @@ abstract class _Error implements CatalogState {
   String? get text;
   @JsonKey(ignore: true)
   _$$_ErrorCopyWith<_$_Error> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$_SuggestionsByTextCopyWith<$Res> {
+  factory _$$_SuggestionsByTextCopyWith(_$_SuggestionsByText value,
+          $Res Function(_$_SuggestionsByText) then) =
+      __$$_SuggestionsByTextCopyWithImpl<$Res>;
+  @useResult
+  $Res call({SuggestionsResponse data});
+}
+
+/// @nodoc
+class __$$_SuggestionsByTextCopyWithImpl<$Res>
+    extends _$CatalogStateCopyWithImpl<$Res, _$_SuggestionsByText>
+    implements _$$_SuggestionsByTextCopyWith<$Res> {
+  __$$_SuggestionsByTextCopyWithImpl(
+      _$_SuggestionsByText _value, $Res Function(_$_SuggestionsByText) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? data = null,
+  }) {
+    return _then(_$_SuggestionsByText(
+      null == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as SuggestionsResponse,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_SuggestionsByText implements _SuggestionsByText {
+  const _$_SuggestionsByText(this.data);
+
+  @override
+  final SuggestionsResponse data;
+
+  @override
+  String toString() {
+    return 'CatalogState.suggestionsByText(data: $data)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_SuggestionsByText &&
+            (identical(other.data, data) || other.data == data));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, data);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_SuggestionsByTextCopyWith<_$_SuggestionsByText> get copyWith =>
+      __$$_SuggestionsByTextCopyWithImpl<_$_SuggestionsByText>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initializing,
+    required TResult Function(CatalogResponse data, List<Region> reg) loaded,
+    required TResult Function(
+            ProductsResponse data, List<FavoriteData>? items, String search)
+        searchProducts,
+    required TResult Function() emptyData,
+    required TResult Function(String? text) error,
+    required TResult Function(SuggestionsResponse data) suggestionsByText,
+    required TResult Function(List<dynamic> data) suggestions,
+  }) {
+    return suggestionsByText(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initializing,
+    TResult? Function(CatalogResponse data, List<Region> reg)? loaded,
+    TResult? Function(
+            ProductsResponse data, List<FavoriteData>? items, String search)?
+        searchProducts,
+    TResult? Function()? emptyData,
+    TResult? Function(String? text)? error,
+    TResult? Function(SuggestionsResponse data)? suggestionsByText,
+    TResult? Function(List<dynamic> data)? suggestions,
+  }) {
+    return suggestionsByText?.call(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initializing,
+    TResult Function(CatalogResponse data, List<Region> reg)? loaded,
+    TResult Function(
+            ProductsResponse data, List<FavoriteData>? items, String search)?
+        searchProducts,
+    TResult Function()? emptyData,
+    TResult Function(String? text)? error,
+    TResult Function(SuggestionsResponse data)? suggestionsByText,
+    TResult Function(List<dynamic> data)? suggestions,
+    required TResult orElse(),
+  }) {
+    if (suggestionsByText != null) {
+      return suggestionsByText(data);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initializing value) initializing,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_SearchProducts value) searchProducts,
+    required TResult Function(_EmptyData value) emptyData,
+    required TResult Function(_Error value) error,
+    required TResult Function(_SuggestionsByText value) suggestionsByText,
+    required TResult Function(_Suggestions value) suggestions,
+  }) {
+    return suggestionsByText(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initializing value)? initializing,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_SearchProducts value)? searchProducts,
+    TResult? Function(_EmptyData value)? emptyData,
+    TResult? Function(_Error value)? error,
+    TResult? Function(_SuggestionsByText value)? suggestionsByText,
+    TResult? Function(_Suggestions value)? suggestions,
+  }) {
+    return suggestionsByText?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initializing value)? initializing,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_SearchProducts value)? searchProducts,
+    TResult Function(_EmptyData value)? emptyData,
+    TResult Function(_Error value)? error,
+    TResult Function(_SuggestionsByText value)? suggestionsByText,
+    TResult Function(_Suggestions value)? suggestions,
+    required TResult orElse(),
+  }) {
+    if (suggestionsByText != null) {
+      return suggestionsByText(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _SuggestionsByText implements CatalogState {
+  const factory _SuggestionsByText(final SuggestionsResponse data) =
+      _$_SuggestionsByText;
+
+  SuggestionsResponse get data;
+  @JsonKey(ignore: true)
+  _$$_SuggestionsByTextCopyWith<_$_SuggestionsByText> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$_SuggestionsCopyWith<$Res> {
+  factory _$$_SuggestionsCopyWith(
+          _$_Suggestions value, $Res Function(_$_Suggestions) then) =
+      __$$_SuggestionsCopyWithImpl<$Res>;
+  @useResult
+  $Res call({List<dynamic> data});
+}
+
+/// @nodoc
+class __$$_SuggestionsCopyWithImpl<$Res>
+    extends _$CatalogStateCopyWithImpl<$Res, _$_Suggestions>
+    implements _$$_SuggestionsCopyWith<$Res> {
+  __$$_SuggestionsCopyWithImpl(
+      _$_Suggestions _value, $Res Function(_$_Suggestions) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? data = null,
+  }) {
+    return _then(_$_Suggestions(
+      null == data
+          ? _value._data
+          : data // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_Suggestions implements _Suggestions {
+  const _$_Suggestions(final List<dynamic> data) : _data = data;
+
+  final List<dynamic> _data;
+  @override
+  List<dynamic> get data {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_data);
+  }
+
+  @override
+  String toString() {
+    return 'CatalogState.suggestions(data: $data)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_Suggestions &&
+            const DeepCollectionEquality().equals(other._data, _data));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_data));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_SuggestionsCopyWith<_$_Suggestions> get copyWith =>
+      __$$_SuggestionsCopyWithImpl<_$_Suggestions>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initializing,
+    required TResult Function(CatalogResponse data, List<Region> reg) loaded,
+    required TResult Function(
+            ProductsResponse data, List<FavoriteData>? items, String search)
+        searchProducts,
+    required TResult Function() emptyData,
+    required TResult Function(String? text) error,
+    required TResult Function(SuggestionsResponse data) suggestionsByText,
+    required TResult Function(List<dynamic> data) suggestions,
+  }) {
+    return suggestions(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initializing,
+    TResult? Function(CatalogResponse data, List<Region> reg)? loaded,
+    TResult? Function(
+            ProductsResponse data, List<FavoriteData>? items, String search)?
+        searchProducts,
+    TResult? Function()? emptyData,
+    TResult? Function(String? text)? error,
+    TResult? Function(SuggestionsResponse data)? suggestionsByText,
+    TResult? Function(List<dynamic> data)? suggestions,
+  }) {
+    return suggestions?.call(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initializing,
+    TResult Function(CatalogResponse data, List<Region> reg)? loaded,
+    TResult Function(
+            ProductsResponse data, List<FavoriteData>? items, String search)?
+        searchProducts,
+    TResult Function()? emptyData,
+    TResult Function(String? text)? error,
+    TResult Function(SuggestionsResponse data)? suggestionsByText,
+    TResult Function(List<dynamic> data)? suggestions,
+    required TResult orElse(),
+  }) {
+    if (suggestions != null) {
+      return suggestions(data);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initializing value) initializing,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_SearchProducts value) searchProducts,
+    required TResult Function(_EmptyData value) emptyData,
+    required TResult Function(_Error value) error,
+    required TResult Function(_SuggestionsByText value) suggestionsByText,
+    required TResult Function(_Suggestions value) suggestions,
+  }) {
+    return suggestions(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initializing value)? initializing,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_SearchProducts value)? searchProducts,
+    TResult? Function(_EmptyData value)? emptyData,
+    TResult? Function(_Error value)? error,
+    TResult? Function(_SuggestionsByText value)? suggestionsByText,
+    TResult? Function(_Suggestions value)? suggestions,
+  }) {
+    return suggestions?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initializing value)? initializing,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_SearchProducts value)? searchProducts,
+    TResult Function(_EmptyData value)? emptyData,
+    TResult Function(_Error value)? error,
+    TResult Function(_SuggestionsByText value)? suggestionsByText,
+    TResult Function(_Suggestions value)? suggestions,
+    required TResult orElse(),
+  }) {
+    if (suggestions != null) {
+      return suggestions(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Suggestions implements CatalogState {
+  const factory _Suggestions(final List<dynamic> data) = _$_Suggestions;
+
+  List<dynamic> get data;
+  @JsonKey(ignore: true)
+  _$$_SuggestionsCopyWith<_$_Suggestions> get copyWith =>
       throw _privateConstructorUsedError;
 }

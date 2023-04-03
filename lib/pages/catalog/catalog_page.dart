@@ -4,9 +4,12 @@ import 'package:cvetovik/core/services/providers/region_info_provider.dart';
 import 'package:cvetovik/core/ui/app_ui.dart';
 import 'package:cvetovik/models/api/response/region/region_response.dart';
 import 'package:cvetovik/models/app/nav_data.dart';
+import 'package:cvetovik/models/state/catalog_state.dart';
 import 'package:cvetovik/pages/catalog/catalog_model.dart';
 import 'package:cvetovik/pages/catalog/widget/catalog_content.dart';
+import 'package:cvetovik/pages/catalog/widget/suggestions_page.dart';
 import 'package:cvetovik/pages/products/models/enum/sort/sort_type.dart';
+import 'package:cvetovik/pages/products/pages/suggestion_page.dart';
 import 'package:cvetovik/pages/search/search_result_page.dart';
 import 'package:cvetovik/widgets/app_back_button.dart';
 import 'package:cvetovik/widgets/region/provider/current_region_provider.dart';
@@ -48,6 +51,7 @@ class _CatalogWidgetState extends ConsumerState<CatalogPage> {
   List<Region> regItems = [];
   late Region selectedRegion;
   bool filtered = false;
+  bool needBack = false;
 
   //final searchKey = GlobalKey();
 
@@ -60,6 +64,22 @@ class _CatalogWidgetState extends ConsumerState<CatalogPage> {
       appBar: AppBar(
         leading: _getLeading(context),
         title: SearchBarWidget(
+          onChanged: (str) async {
+            if (str.length > 2) {
+              var model = _getModel();
+              await model.getSuggestionsByText(str);
+            } else if (str.length == 0) {
+              var model = _getModel();
+              await model.getSuggestions();
+            }
+          },
+          onTap: () async {
+            setState(() {
+              needBack = true;
+            });
+            var model = _getModel();
+            await model.getSuggestions();
+          },
           //key: searchKey,
           action: (String text) async {
             filtered = text.isNotEmpty;
@@ -78,6 +98,17 @@ class _CatalogWidgetState extends ConsumerState<CatalogPage> {
             ref.watch(catalogModelProvider(widget.parentId));
 
         stateCatalogModel.maybeWhen(
+          suggestions: (data) {
+            print("data ${data}");
+            body = SuggestionsPage(suggestions: data, onTap: (str) async {
+              await _searchAction(str);
+            },);
+          },
+            suggestionsByText: (data) {
+              body = SuggestionsPage(model: data.data, onTap: (str) async {
+                await _searchAction(str);
+              },);
+            },
             searchProducts: (data, favorites, search) {
               body = SearchResultPage(
                 data: data,
@@ -172,7 +203,15 @@ class _CatalogWidgetState extends ConsumerState<CatalogPage> {
               Navigator.pop(context);
             }
           })
-        : null;
+        : needBack ? AppBackButton(tap: () async {
+          FocusManager.instance.primaryFocus!.unfocus();
+          var model = _getModel();
+          model.state = CatalogState.initializing();
+          await model.load();
+          setState(() {
+            needBack = false;
+          });
+    }) : null;
   }
 
   Future<void> _searchAction(String text) async {

@@ -16,6 +16,7 @@ class ProfilePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var set = ref.watch(settingsProvider);
     String token = set.getData(SetKey.clientToken);
+    print("TOKEN IS ${token}");
     late Widget widget;
     if (token.isNotEmpty) {
       widget = PersonalStartPage();

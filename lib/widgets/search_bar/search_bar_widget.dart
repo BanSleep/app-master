@@ -9,8 +9,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 typedef AsyncSearchCallback = Future<void> Function(String text);
 
 class SearchBarWidget extends StatefulWidget {
-  const SearchBarWidget({Key? key, this.action}) : super(key: key);
+  const SearchBarWidget({Key? key, this.action, this.onTap, this.onChanged}) : super(key: key);
   final AsyncSearchCallback? action;
+  final Function()? onTap;
+  final Function(String)? onChanged;
   @override
   _SearchBarWidgetState createState() => _SearchBarWidgetState();
 }
@@ -41,6 +43,8 @@ class _SearchBarWidgetState extends State<SearchBarWidget>
     return Padding(
       padding: AppUi.appBarPadding,
       child: TextField(
+        onChanged: widget.onChanged,
+        onTap: widget.onTap,
         onSubmitted: (text) async {
           if (widget.action != null) {
             await widget.action!(text);

@@ -7,6 +7,7 @@ import 'package:cvetovik/models/api/request/search_param_request.dart';
 import 'package:cvetovik/models/api/response/filter_reponse.dart';
 import 'package:cvetovik/models/api/response/product_response.dart';
 import 'package:cvetovik/models/api/response/shared/simple_response.dart';
+import 'package:cvetovik/models/api/response/suggestions_response.dart';
 import 'package:cvetovik/models/api/shared/device_register_add.dart';
 import 'package:cvetovik/models/api/shared/local_client_info.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -148,6 +149,41 @@ class ProductApi extends ApiBase {
     } catch (e) {
       print(e);
       return FilterResponse(result: false);
+    }
+  }
+
+  Future<SuggestionsResponse> getSuggestionsByText(
+    String text,
+    DeviceRegisterAdd deviceRegister,
+    LocalClientInfo clientInfo,
+  ) async {
+    try {
+      String path = 'products/suggestions/';
+      var response = await getPostResponse(path,
+          clientInfo: clientInfo,
+          body: jsonEncode({'search_text': text}),
+          deviceRegister: deviceRegister);
+      var result = getResult<SuggestionsResponse>(
+          response,
+          (e) => SuggestionsResponse.fromJson(e),
+          SuggestionsResponse(result: false));
+      return result;
+    } catch (e) {
+      return SuggestionsResponse(result: false);
+    }
+  }
+  Future<List<dynamic>> getSuggestions(DeviceRegisterAdd deviceRegister, LocalClientInfo clientInfo) async {
+    try {
+      String path = 'products/suggestions/';
+      var response = await getPostResponse(path,
+          clientInfo: clientInfo,
+          deviceRegister: deviceRegister,);
+      var data = utf8.decode(response.bodyBytes);
+      print(jsonDecode(data)['data']);
+      return jsonDecode(data)['data'];
+    } catch (e) {
+      return [];
+      // return SuggestionsResponse(result: false);
     }
   }
 }

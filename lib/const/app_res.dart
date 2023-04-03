@@ -259,6 +259,7 @@ class AppRes {
   static const total2 = 'Итого';
   static const minimumSumForPromoCode =
       'Минимальная сумма заказа для этого промокода';
+  static const mostPopular = 'Популярные запросы';
   //endregion
 
 static const List<String> guaranteTexts =[

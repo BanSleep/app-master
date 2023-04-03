@@ -94,6 +94,31 @@ class CatalogModel extends StateNotifier<CatalogState> with SortDataMixin {
     }
   }
 
+  Future<void> getSuggestionsByText(String text) async {
+    try {
+      state = CatalogState.initializing();
+      var reqData = set.getDeviceRegisterWithRegion();
+      var clientInfo = set.getLocalClientInfo();
+      var res = await productApi.getSuggestionsByText(text, reqData, clientInfo);
+      state = CatalogState.suggestionsByText(res);
+    } catch (e) {
+      state = CatalogState.error(AppRes.error);
+    }
+
+  }
+  Future<void> getSuggestions() async {
+    try {
+      state = CatalogState.initializing();
+      var reqData = set.getDeviceRegisterWithRegion();
+      var clientInfo = set.getLocalClientInfo();
+      var res = await productApi.getSuggestions(reqData, clientInfo);
+      state = CatalogState.suggestions(res);
+    } catch (e) {
+      state = CatalogState.error(AppRes.error);
+    }
+
+  }
+
   Future<void> applySort({required SortType sortType}) async {
     _sortType = sortType;
     await search(_searchText);
