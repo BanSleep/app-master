@@ -18,6 +18,8 @@ class DatePickerWidget extends StatefulWidget {
   final DateTime? minDate;
   final DateTime? maxDate;
   final DateTime? birthDate;
+  final bool isTimePicker;
+  final bool isRowPickers;
 
   const DatePickerWidget({
     Key? key,
@@ -26,6 +28,8 @@ class DatePickerWidget extends StatefulWidget {
     this.maxDate,
     this.birthDate,
     this.timeRanges,
+    this.isTimePicker = false,
+    this.isRowPickers = false,
   }) : super(key: key);
 
   @override
@@ -114,42 +118,58 @@ class _DatePickerWidgetState extends State<DatePickerWidget>
     log("build date picker $_selectedDate $_minDate");
     return InkWell(
       onTap: () async {
-        final DateTime? picked = await showDatePicker(
-          context: context,
-          builder: (context, child) {
-            return Theme(
-              data: ThemeData.light().copyWith(
-                  primaryColor: AppAllColors.lightAccent,
-                  buttonTheme:
-                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                  colorScheme:
-                      ColorScheme.light(primary: AppAllColors.lightAccent)
-                          .copyWith(secondary: AppAllColors.lightAccent)),
-              child: child!,
-            );
-          },
-          initialDate: widget.birthDate == null
-              ? (!minDateChosen ? _minDate : DateTime.now())
-              : widget.birthDate!,
-          firstDate: _minDate,
-          // здесь можно
-          lastDate: widget.maxDate == null
-              ? DateTime(DateTime.now().year + 2)
-              : widget.maxDate!,
-          //locale: Locale('en'),
-        );
+        if (widget.isTimePicker) {
+          final TimeOfDay? picked = await showTimePicker(
+            context: context,
+            initialTime: TimeOfDay(
+              hour: DateTime.now().hour,
+              minute: DateTime.now().minute,
+            ),
+            builder: (context, child) {
+              return pickerTheme(child);
+            },
+          );
 
-        if (picked != null && picked != _selectedDate) {
-          setState(() {
-            _selectedDate = picked;
-            if (widget.onUpdate != null) {
-              widget.onUpdate!(_selectedDate);
-            }
-          });
+          if (picked != null &&
+              picked.hour != _selectedDate.hour &&
+              picked.minute != _selectedDate.minute) {
+            setState(() {
+              _selectedDate = DateTime(_selectedDate.year, _selectedDate.month,
+                  _selectedDate.day, picked.hour, picked.minute);
+              if (widget.onUpdate != null) {
+                widget.onUpdate!(_selectedDate);
+              }
+            });
+          }
+        } else {
+          final DateTime? picked = await showDatePicker(
+            context: context,
+            builder: (context, child) {
+              return pickerTheme(child);
+            },
+            initialDate: widget.birthDate == null
+                ? (!minDateChosen ? _minDate : DateTime.now())
+                : widget.birthDate!,
+            firstDate: _minDate,
+            // здесь можно
+            lastDate: widget.maxDate == null
+                ? DateTime(DateTime.now().year + 2)
+                : widget.maxDate!,
+            //locale: Locale('en'),
+          );
+
+          if (picked != null && picked != _selectedDate) {
+            setState(() {
+              _selectedDate = picked;
+              if (widget.onUpdate != null) {
+                widget.onUpdate!(_selectedDate);
+              }
+            });
+          }
         }
       },
       child: Container(
-        width: 147.w,
+        width: widget.isRowPickers ? 123.w : 147.w,
         height: 38.h,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(6.r),
@@ -166,13 +186,15 @@ class _DatePickerWidgetState extends State<DatePickerWidget>
           children: [
             SizedBox.shrink(),
             Text(
-              formattedDate.format(_selectedDate),
+              widget.isTimePicker
+                  ? DateFormat('hh:mm').format(_selectedDate)
+                  : formattedDate.format(_selectedDate),
               style: AppTextStyles.textDateTime,
             ),
             Padding(
               padding: EdgeInsets.only(right: 10.w),
               child: SvgPicture.asset(
-                AppIcons.date,
+                widget.isTimePicker ? AppIcons.time : AppIcons.date,
                 height: 18.h,
                 width: 18.w,
               ),
@@ -182,4 +204,15 @@ class _DatePickerWidgetState extends State<DatePickerWidget>
       ),
     );
   }
+}
+
+Theme pickerTheme(Widget? child) {
+  return Theme(
+    data: ThemeData.light().copyWith(
+        primaryColor: AppAllColors.lightAccent,
+        buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+        colorScheme: ColorScheme.light(primary: AppAllColors.lightAccent)
+            .copyWith(secondary: AppAllColors.lightAccent)),
+    child: child!,
+  );
 }

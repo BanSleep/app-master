@@ -57,4 +57,9 @@ class AppIcons {
   static const String marketMark = 'assets/icons/svg/market_mark.svg';
   static const String marketMark2 = 'assets/icons/svg/market_mark2.svg';
   static const String svetovikWhite = 'assets/icons/svg/svetovik_white.svg';
+
+  static const String sun = 'assets/icons/svg/sun.svg';
+  static const String moon = 'assets/icons/svg/moon.svg';
+  static const String dollar = 'assets/icons/svg/dollar.svg';
+  static const String arrow_down = 'assets/icons/svg/arrow_down.svg';
 }

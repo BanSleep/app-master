@@ -9,7 +9,7 @@ import 'package:cvetovik/pages/ordering/order_result_page.dart';
 import 'package:cvetovik/pages/ordering/providers/ordering/ordering_bloc.dart';
 import 'package:cvetovik/widgets/app_back_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+//import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PaymentPage extends ConsumerStatefulWidget {
@@ -70,35 +70,35 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                 },
                 child: Text('ok')),*/
             Expanded(
-              child: Container(
-                margin: const EdgeInsets.all(10.0),
-                child: InAppWebView(
-                    initialOptions: InAppWebViewGroupOptions(
-                      ios: IOSInAppWebViewOptions(
-                        applePayAPIEnabled: true,
-                      ),
-                      crossPlatform: InAppWebViewOptions(
-                          userAgent: AppConst.uAgent,
-                          javaScriptEnabled: true,
-                          useOnDownloadStart: true,
-                          useOnLoadResource: true,
-                          javaScriptCanOpenWindowsAutomatically: true,
-                          useShouldOverrideUrlLoading: true),
-                    ),
-                    initialUrlRequest:
-                        URLRequest(headers: headers, url: Uri.parse(startUrl)),
-                    //initialData:InAppWebViewInitialData(data: str) ,
-                    onConsoleMessage: (controller, consoleMessage) async {
-                      print(consoleMessage.message);
-                      if (consoleMessage.message == 'payment complete') {
-                        var bloc = ref.read(orderingBlocProvider);
-                        await bloc.paymentCompleted(context);
-                      } else {
-                        if (consoleMessage.message == 'fail payment') {
-                          Navigator.pop(context);
-                        }
-                      }
-                    }),
+               child: Container(
+              //   margin: const EdgeInsets.all(10.0), //todo new WebView
+              //   child: InAppWebView(
+              //       initialOptions: InAppWebViewGroupOptions(
+              //         ios: IOSInAppWebViewOptions(
+              //           applePayAPIEnabled: true,
+              //         ),
+              //         crossPlatform: InAppWebViewOptions(
+              //             userAgent: AppConst.uAgent,
+              //             javaScriptEnabled: true,
+              //             useOnDownloadStart: true,
+              //             useOnLoadResource: true,
+              //             javaScriptCanOpenWindowsAutomatically: true,
+              //             useShouldOverrideUrlLoading: true),
+              //       ),
+              //       initialUrlRequest:
+              //           URLRequest(headers: headers, url: Uri.parse(startUrl)),
+              //       //initialData:InAppWebViewInitialData(data: str) ,
+              //       onConsoleMessage: (controller, consoleMessage) async {
+              //         print(consoleMessage.message);
+              //         if (consoleMessage.message == 'payment complete') {
+              //           var bloc = ref.read(orderingBlocProvider);
+              //           await bloc.paymentCompleted(context);
+              //         } else {
+              //           if (consoleMessage.message == 'fail payment') {
+              //             Navigator.pop(context);
+              //           }
+              //         }
+              //       }),
               ),
             ),
           ],

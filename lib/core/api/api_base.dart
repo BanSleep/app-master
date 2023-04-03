@@ -39,6 +39,10 @@ abstract class ApiBase {
     Map<String, String>? headers;
     if (deviceRegister != null) {
       headers = deviceRegister.toJson();
+      log(deviceRegister.deviceId.toString(), name: 'deviceId');
+      log(deviceRegister.token.toString(), name: 'deviceToken');
+      log(clientInfo.clientId.toString(), name: 'clientId');
+      log(clientInfo.clientToken.toString(), name: 'clientToken');
       if (jsonBody) {
         headers.putIfAbsent(
           'Content-Type',

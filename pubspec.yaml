@@ -55,7 +55,7 @@ dependencies:
   intl: ^0.17.0
   flutter_typeahead: ^4.3.7
   permission_handler: ^10.2.0
-  flutter_inappwebview: ^5.3.2
+  #flutter_inappwebview: ^5.3.2
   maps_toolkit: ^2.0.0
   tuple: ^2.0.0
   sentry_flutter: ^6.1.2

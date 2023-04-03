@@ -21,6 +21,8 @@ class AppAllColors {
 
   static const lightAccent = Color(0xff2bcb4e);
 
+  static const lightGreenBackground = Color(0xffEFFFF3);
+
   static const lightGrey = Color(0xfff6f6f6);
 
   static const lightGrey2 = Color(0xffCCCCCC);
