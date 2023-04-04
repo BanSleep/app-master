@@ -68,6 +68,7 @@ print(result.data!.toString()+'actual141');
     DeviceRegisterAdd deviceRegister,
     LocalClientInfo clientInfo,
   ) async {
+    print("DEVIDE ${deviceRegister.regionId}");
     String path = 'regions/delivery_info/${deviceRegister.regionId}/';
     var response = await getPostResponse(
       path,

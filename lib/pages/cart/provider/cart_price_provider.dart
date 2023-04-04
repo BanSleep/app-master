@@ -75,10 +75,10 @@ class CartPriceModel extends StateNotifier<CartContentState> {
   }
 
   Future<void> goCheckout(BuildContext context, String promoCode,int? useBonus) async {
-    var deliveryInfoProv = ref.read(deliveryInfoProvider);
+    var deliveryInfoProv = ref.watch(deliveryInfoProvider.notifier);
     var set = ref.read(settingsProvider);
     var regData = set.getDeviceRegisterWithRegion();
-    var deliveryInfo = await deliveryInfoProv.getDeliveryInfo(regData);
+    var deliveryInfo = await deliveryInfoProv.getDeliveryInfo();
     if (_cartData.promoCodeDiscount > 0) {
       var discountProv = ref.read(discountProvider.notifier);
       discountProv.state =

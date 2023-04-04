@@ -4,6 +4,7 @@ import 'package:cvetovik/core/api/home_api.dart';
 import 'package:cvetovik/core/api/product_api.dart';
 import 'package:cvetovik/core/db/dao/favorites_dao.dart';
 import 'package:cvetovik/core/services/providers/db_provider.dart';
+import 'package:cvetovik/core/services/providers/delivery_info_provider.dart';
 import 'package:cvetovik/core/services/settings_services.dart';
 import 'package:cvetovik/models/api/shared/device_register_add.dart';
 import 'package:cvetovik/models/state/catalog_state.dart';

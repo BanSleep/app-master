@@ -10,9 +10,11 @@ import 'package:cvetovik/models/api/response/cabinet/client_info_response.dart';
 import 'package:cvetovik/models/api/response/region/region_response.dart';
 import 'package:cvetovik/models/enums/app/set_key.dart';
 import 'package:cvetovik/models/enums/app/tab_item.dart';
+import 'package:cvetovik/pages/ordering/providers/ordering/calc_delivery.dart';
 import 'package:cvetovik/pages/profile/bonus_card/bonus_card_info_sheet.dart';
 import 'package:cvetovik/pages/profile/bonus_card/bonus_card_utils.dart';
 import 'package:cvetovik/pages/profile/bonus_card/bonus_card_widget.dart';
+import 'package:cvetovik/pages/profile/calc_delivery.dart';
 import 'package:cvetovik/pages/profile/delivery_counter/delivery_counter.dart';
 import 'package:cvetovik/pages/profile/favorite_addresses/favorite_addresses_page.dart';
 import 'package:cvetovik/pages/profile/favorite_dates/favorite_dates_page.dart';
@@ -429,10 +431,7 @@ class _PersonalAreaPageState extends ConsumerState<PersonalAreaPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => InfoBasePage(
-                                  title: AppRes.delivery,
-                                  pageName: 'dostavka',
-                                ),
+                                builder: (context) => DeliveryCalculationScreen(address: 'Санкт-Петербург')
                               ),
                             );
                           }),

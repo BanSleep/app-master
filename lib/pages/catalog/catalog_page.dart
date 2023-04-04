@@ -223,7 +223,7 @@ class _CatalogWidgetState extends ConsumerState<CatalogPage> {
     var item = regItems.firstWhereOrNull((element) => element.title == title);
     if (item != null && item.title != selectedRegion.title) {
       selectedRegion = item;
-      ref.read(deliveryInfoProvider).init();
+      ref.watch(deliveryInfoProvider.notifier).init();
       ref.read(repositoryInfoProvider).init();
 
       await ref

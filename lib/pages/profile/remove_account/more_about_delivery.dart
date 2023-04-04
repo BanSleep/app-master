@@ -3,14 +3,16 @@ import 'package:cvetovik/const/app_icons.dart';
 import 'package:cvetovik/core/ui/app_all_colors.dart';
 import 'package:cvetovik/core/ui/app_text_styles.dart';
 import 'package:cvetovik/models/api/response/region/delivery_info_response.dart';
+import 'package:cvetovik/models/api/shared/device_register_add.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:yandex_mapkit/yandex_mapkit.dart';
 
-class MoreAboutDelivery extends StatelessWidget {
+class MoreAboutDelivery extends StatefulWidget {
   final DeliveryInfo deliveryInfo;
 
-  const MoreAboutDelivery({
+  MoreAboutDelivery({
     Key? key,
     required this.deliveryInfo,
   }) : super(key: key);
@@ -29,6 +31,39 @@ class MoreAboutDelivery extends StatelessWidget {
     'При оформлении заказа в розничных магазинах. Если Вы выбрали букет или композицию в нашем розничном магазине, Вы можете заказать услугу доставки.  ',
     'Если в заказе был указан неверный адрес или другие данные, а также если получатель отсутствует по указанному адресу или отказывается принять товар, по какой бы то ни было причине, заказ считается выполненным. ',
   ];
+
+  @override
+  State<MoreAboutDelivery> createState() => _MoreAboutDeliveryState();
+}
+
+class _MoreAboutDeliveryState extends State<MoreAboutDelivery> {
+  late YandexMapController _controller;
+  List<MapObject> mapObjects = [];
+  @override
+  void initState() {
+    print(widget.deliveryInfo.zones!['default']!.zone1);
+    List<List<double>> firstZone =
+        parseStringToList(widget.deliveryInfo.zones!['default']!.zone1!);
+    List<List<double>> secondZone =
+        parseStringToList(widget.deliveryInfo.zones!['default']!.zone2 ?? '');
+
+    for (int i = 0; i < 2; i++) {
+      mapObjects.add(PolygonMapObject(
+        fillColor: i == 0 ? Colors.green.withOpacity(0.2) : Colors.blue.withOpacity(0.2),
+          strokeColor: i == 0 ? Colors.green.withOpacity(0.5) : Colors.blue.withOpacity(0.5),
+          mapId: MapObjectId('zone$i'),
+          polygon: Polygon(
+              outerRing: LinearRing(
+                points: [
+                  for (int j = 0; i == 0 ? j < firstZone.length : j < secondZone.length; j++) ...[
+                    Point(latitude: i == 0 ? firstZone[j][0] : secondZone[j][0], longitude: i == 0 ? firstZone[j][1] : secondZone[j][1])
+                  ]
+                ],
+              ),
+              innerRings: [])));
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +87,24 @@ class MoreAboutDelivery extends StatelessWidget {
                 Container(
                   height: 222.h,
                   width: 300.w,
-                  color: Colors.grey,
+                  decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(15.w)),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15.w),
+                      child: YandexMap(
+                        mapObjects: mapObjects,
+                        onMapCreated: (controller) async {
+                          _controller = controller;
+                          List<double> mapCenter = [];
+                          mapCenter.add(double.parse(widget.deliveryInfo.mapCenter.split(',').first));
+                          mapCenter.add(double.parse(widget.deliveryInfo.mapCenter.split(',').last));
+                          await _controller.moveCamera(
+                              CameraUpdate.newCameraPosition(CameraPosition(
+                                  target: Point(longitude: mapCenter[1], latitude: mapCenter[0]),
+                                  zoom: 8)));
+                        },
+                      )),
                 ),
                 12.h.heightBox,
                 SizedBox(
@@ -178,7 +230,7 @@ class MoreAboutDelivery extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            titles[index],
+            MoreAboutDelivery.titles[index],
             style: AppTextStyles.descriptionMedium10
                 .copyWith(color: AppAllColors.black),
           ),
@@ -188,7 +240,7 @@ class MoreAboutDelivery extends StatelessWidget {
               SizedBox(
                 width: 215.w,
                 child: Text(
-                  text[index],
+                  MoreAboutDelivery.text[index],
                   style: AppTextStyles.descriptionMedium
                       .copyWith(color: AppAllColors.lightBlack),
                 ),
@@ -200,5 +252,19 @@ class MoreAboutDelivery extends StatelessWidget {
         ],
       ),
     ).paddingSymmetric(horizontal: 9.w);
+  }
+
+  List<List<double>> parseStringToList(String input) {
+    List<List<double>> result = [];
+
+    RegExp exp = RegExp(r"\[([\d\.]+),([\d\.]+)\]");
+    Iterable<RegExpMatch> matches = exp.allMatches(input);
+    for (RegExpMatch match in matches) {
+      double lat = double.parse(match.group(1)!);
+      double lon = double.parse(match.group(2)!);
+      result.add([lat, lon]);
+    }
+
+    return result;
   }
 }
