@@ -423,7 +423,7 @@ void main() async {
                 //debugShowMaterialGrid: true,
                 //home: HelloScreen(),
                 //home: MoreAboutDelivery(),
-                home: DeliveryCalculationScreen(address: 'fghjk', orderPrice: 5000, deliveryInfo: deliveryInfo!,),
+                home: DeliveryCalculationScreen(address: 'fghjk', deliveryInfo: deliveryInfo!,),
               );
             },
           ),

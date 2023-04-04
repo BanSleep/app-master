@@ -2,12 +2,18 @@ import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cvetovik/const/app_icons.dart';
 import 'package:cvetovik/core/ui/app_all_colors.dart';
 import 'package:cvetovik/core/ui/app_text_styles.dart';
+import 'package:cvetovik/models/api/response/region/delivery_info_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class MoreAboutDelivery extends StatelessWidget {
-  const MoreAboutDelivery({Key? key}) : super(key: key);
+  final DeliveryInfo deliveryInfo;
+
+  const MoreAboutDelivery({
+    Key? key,
+    required this.deliveryInfo,
+  }) : super(key: key);
 
   static const List<String> titles = [
     'Доставка в пригород по ценам города',
@@ -89,7 +95,9 @@ class MoreAboutDelivery extends StatelessWidget {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SvgPicture.asset(index == 0 ? AppIcons.dollar : AppIcons.sun),
+                                SvgPicture.asset(index == 0
+                                    ? AppIcons.dollar
+                                    : AppIcons.sun),
                                 const Spacer(),
                                 SizedBox(
                                   width: 135.w,
@@ -110,7 +118,8 @@ class MoreAboutDelivery extends StatelessWidget {
                             12.h.heightBox,
                             Row(
                               children: [
-                                SvgPicture.asset(index == 0 ? AppIcons.time : AppIcons.moon),
+                                SvgPicture.asset(
+                                    index == 0 ? AppIcons.time : AppIcons.moon),
                                 const Spacer(),
                                 SizedBox(
                                   width: 135.w,
