@@ -5,6 +5,7 @@ import 'package:cvetovik/const/app_images.dart';
 import 'package:cvetovik/pages/app_startup/app_startup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 
 class HelloScreen extends StatefulWidget {
   const HelloScreen({Key? key}) : super(key: key);
@@ -55,7 +56,7 @@ class _HelloScreenState extends State<HelloScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var time = DateTime.now().hour;
+    var time = int.parse(DateFormat('HH').format(DateTime.now()));
 
     return Scaffold(
       backgroundColor: getColor(time),

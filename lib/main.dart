@@ -9,7 +9,7 @@ import 'package:cvetovik/pages/profile/remove_account/more_about_delivery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-//import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,7 +23,7 @@ void main() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) async {
-    //Sentry.captureMessage('appStart');
+    // Sentry.captureMessage('appStart');
     // if (Platform.isAndroid) {
     //   await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
     // }

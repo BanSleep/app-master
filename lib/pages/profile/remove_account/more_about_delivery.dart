@@ -124,7 +124,7 @@ class _MoreAboutDeliveryState extends State<MoreAboutDelivery> {
                                   width: 2,
                                 )
                               : null,
-                          color: index == 1
+                          color: index != 0
                               ? AppAllColors.lightGreenBackground
                               : null,
                           borderRadius: BorderRadius.circular(10.r),
