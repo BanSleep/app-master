@@ -9,7 +9,15 @@ class SuggestionsPage extends StatefulWidget {
   final List<SuggestionsData>? model;
   final List<dynamic>? suggestions;
   final Function(String) onTap;
-  const SuggestionsPage({Key? key, this.model, this.suggestions, required this.onTap}) : super(key: key);
+  final bool isSearch;
+
+  const SuggestionsPage(
+      {Key? key,
+      this.model,
+      this.suggestions,
+      required this.onTap,
+      required this.isSearch})
+      : super(key: key);
 
   @override
   _SuggestionsPageState createState() => _SuggestionsPageState();
@@ -23,38 +31,67 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 30,),
-          Text(AppRes.mostPopular, style: AppTextStyles.titleSmall,),
+          SizedBox(
+            height: 30,
+          ),
+          Text(
+            AppRes.mostPopular,
+            style: AppTextStyles.titleSmall,
+          ),
           Expanded(
-            child: ListView.builder(itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  widget.onTap(widget.model != null ? widget.model![index].title : widget.suggestions![index]);
-                },
-                child: Container(
-                  margin: EdgeInsets.only(bottom: 12),
-                  child: Row(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(offset: Offset(0, 4), blurRadius: 15, spreadRadius: 0, color: Colors.black.withOpacity(0.06))
-                          ]
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: Image.asset('assets/images/flowers.png', width: 32, height: 32,),
-                        ),
-                      ),
-                      SizedBox(width: 10,),
-                      Expanded(child: Text('${widget.model != null ? widget.model![index].title : widget.suggestions![index]}', style: AppTextStyles.textDateTime.copyWith(color: AppColors.itemTitle),))
-                    ],
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    widget.onTap(widget.model != null
+                        ? widget.model![index].title
+                        : widget.suggestions![index]);
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 12),
+                    child: Row(
+                      children: [
+                        if (widget.isSearch) ...[
+                          Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                      offset: Offset(0, 4),
+                                      blurRadius: 15,
+                                      spreadRadius: 0,
+                                      color: Colors.black.withOpacity(0.06))
+                                ]),
+                            child: Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: Image.asset(
+                                'assets/images/flowers.png',
+                                width: 32,
+                                height: 32,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                        ],
+                        Expanded(
+                            child: Text(
+                          '${widget.model != null ? widget.model![index].title : widget.suggestions![index]}',
+                          style: AppTextStyles.textDateTime
+                              .copyWith(color: AppColors.itemTitle),
+                        ))
+                      ],
+                    ),
                   ),
-                ),
-              );
-            }, itemCount: widget.model != null ? widget.model!.length : widget.suggestions!.length, padding: EdgeInsets.only(top: 20),),
+                );
+              },
+              itemCount: widget.model != null
+                  ? widget.model!.length
+                  : widget.suggestions!.length,
+              padding: EdgeInsets.only(top: 20),
+            ),
           )
         ],
       ),
