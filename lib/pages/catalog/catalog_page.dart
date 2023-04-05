@@ -100,12 +100,12 @@ class _CatalogWidgetState extends ConsumerState<CatalogPage> {
         stateCatalogModel.maybeWhen(
           suggestions: (data) {
             print("data ${data}");
-            body = SuggestionsPage(isSearch: false, suggestions: data, onTap: (str) async {
+            body = SuggestionsPage(suggestions: data, onTap: (str) async {
               await _searchAction(str);
             },);
           },
             suggestionsByText: (data) {
-              body = SuggestionsPage(isSearch: true, model: data.data, onTap: (str) async {
+              body = SuggestionsPage(model: data.data, onTap: (str) async {
                 await _searchAction(str);
               },);
             },

@@ -9,14 +9,12 @@ class SuggestionsPage extends StatefulWidget {
   final List<SuggestionsData>? model;
   final List<dynamic>? suggestions;
   final Function(String) onTap;
-  final bool isSearch;
 
   const SuggestionsPage(
       {Key? key,
       this.model,
       this.suggestions,
-      required this.onTap,
-      required this.isSearch})
+      required this.onTap,})
       : super(key: key);
 
   @override
@@ -51,31 +49,31 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
                     margin: EdgeInsets.only(bottom: 12),
                     child: Row(
                       children: [
-                        if (widget.isSearch) ...[
-                          Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
-                                  BoxShadow(
-                                      offset: Offset(0, 4),
-                                      blurRadius: 15,
-                                      spreadRadius: 0,
-                                      color: Colors.black.withOpacity(0.06))
-                                ]),
-                            child: Padding(
-                              padding: const EdgeInsets.all(5),
-                              child: Image.asset(
-                                'assets/images/flowers.png',
-                                width: 32,
-                                height: 32,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                        ],
+                        // if (widget.isSearch) ...[
+                        //   Container(
+                        //     decoration: BoxDecoration(
+                        //         color: Colors.white,
+                        //         borderRadius: BorderRadius.circular(10),
+                        //         boxShadow: [
+                        //           BoxShadow(
+                        //               offset: Offset(0, 4),
+                        //               blurRadius: 15,
+                        //               spreadRadius: 0,
+                        //               color: Colors.black.withOpacity(0.06))
+                        //         ]),
+                        //     child: Padding(
+                        //       padding: const EdgeInsets.all(5),
+                        //       child: Image.asset(
+                        //         'assets/images/flowers.png',
+                        //         width: 32,
+                        //         height: 32,
+                        //       ),
+                        //     ),
+                        //   ),
+                        //   SizedBox(
+                        //     width: 10,
+                        //   ),
+                        // ],
                         Expanded(
                             child: Text(
                           '${widget.model != null ? widget.model![index].title : widget.suggestions![index]}',
