@@ -17,6 +17,7 @@ import 'package:cvetovik/pages/ordering/models/enums/zones_delivery.dart';
 import 'package:cvetovik/pages/ordering/models/map_position.dart';
 import 'package:cvetovik/pages/ordering/providers/center_position_provider.dart';
 import 'package:cvetovik/pages/ordering/providers/ordering/calc_delivery.dart';
+import 'package:cvetovik/pages/ordering/widgets/address/address_suggestion_widget.dart';
 import 'package:cvetovik/pages/profile/remove_account/more_about_delivery.dart';
 import 'package:cvetovik/widgets/app_button.dart';
 import 'package:cvetovik/widgets/date_picker_widget.dart';
@@ -25,22 +26,21 @@ import 'package:cvetovik/widgets/share/app_text_field.dart';
 import 'package:cvetovik/widgets/share/value_mixin.dart';
 import 'package:cvetovik/widgets/state/loading_widget.dart';
 import 'package:cvetovik/widgets/state/not_data_widget.dart';
+import 'package:cvetovik/widgets/time/time_select_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:maps_toolkit/maps_toolkit.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 import '../../core/api/yandex_geocoder_api.dart';
 
 class DeliveryCalculationScreen extends ConsumerStatefulWidget {
-  final String address;
-
   const DeliveryCalculationScreen({
     Key? key,
-    required this.address,
   }) : super(key: key);
 
   @override
@@ -58,11 +58,15 @@ class _DeliveryCalculationScreenState
   late DeliveryInfo deliveryInfo;
   final priceKey = GlobalKey();
   final addressKey = GlobalKey();
+  final TextEditingController orderPrice = TextEditingController(text: '1000');
 
   bool _isLoading = false;
   DateTime deliveryDateTime = DateTime.now();
   String address = '';
-  int orderPrice = 0;
+  ZonesDelivery zonesDelivery = ZonesDelivery.none;
+  List<TimeRangeData> ranges = [];
+  double currentHour = double.parse(
+      DateTime.now().hour.toString() + '.' + DateTime.now().minute.toString());
 
   @override
   void initState() {
@@ -82,214 +86,252 @@ class _DeliveryCalculationScreenState
 
   @override
   Widget build(BuildContext context) {
-    if (address.isNotEmpty) {
-      setState(() {});
-    }
-
-    ///сука
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
       },
       child: AppScaffold(
-        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: false,
         title: Text('Доставка'),
         extendBodyBehindAppBar: true,
         body: Consumer(builder: (context, WidgetRef ref, Widget? child) {
           Widget? body;
 
           final stateDeliveryInfo = ref.watch(deliveryInfoProvider);
-          stateDeliveryInfo.maybeWhen(orElse: () {
-            body = Container();
-          },
+          stateDeliveryInfo.maybeWhen(
+              orElse: () {
+                body = Container();
+              },
               initializing: () {
-                body =  LoadingWidget();
+                body = LoadingWidget();
               },
               emptyData: () => NotDataWidget(),
-          loaded: (data) {
-            deliveryInfo = data;
-              calcDelivery = CalcDelivery(deliveryInfo);
-            body =  LoadingOverlay(
-              isLoading: _isLoading,
-              opacity: AppUi.opacity,
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: YandexMap(
-                      mapObjects: mapObjects,
-                      onMapCreated: (yandexMapController) async {
-                        _controller = yandexMapController;
+              loaded: (data) {
+                deliveryInfo = data;
+                ranges = deliveryInfo.timeRanges.timeRangesDefault;
+                calcDelivery = CalcDelivery(deliveryInfo);
+                body = LoadingOverlay(
+                  isLoading: _isLoading,
+                  opacity: AppUi.opacity,
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: YandexMap(
+                          mapObjects: mapObjects,
+                          onMapCreated: (yandexMapController) async {
+                            _controller = yandexMapController;
 
-                        Point? fixPoint;
-                        var prov = ref.read(centerPositionProvider.notifier);
-                        if (prov.state != null) {
-                          fixPoint = Point(
-                              latitude: prov.state!.latitude,
-                              longitude: prov.state!.longitude);
-                        }
-                        if (fixPoint != null) {
-                          await _controller.moveCamera(
-                            CameraUpdate.newCameraPosition(
-                              CameraPosition(target: fixPoint),
-                            ),
-                          );
-                        }
-                      },
-                      onMapTap: _onMapTap,
-                    ),
-                  ),
-                  Positioned(
-                    left: 10.w,
-                    right: 10.w,
-                    bottom: 77.h,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        GestureDetector(
-                          onTap: () async {
-                            if (!(await locationPermissionGranted)) {
-                              AppUi.showToast(context, "Не выдано разрешение");
-                              return;
-                            }
-
-                            setState(() => _isLoading = true);
-
-                            final _userPosition =
-                            await _controller.getUserCameraPosition();
-
-                            setState(() => _isLoading = false);
-
-                            if (_userPosition != null) {
-                              await _controller.moveCamera(
-                                CameraUpdate.newCameraPosition(
-                                  CameraPosition(
-                                    target: _userPosition.target,
-                                  ),
-                                ),
-                              );
-                            }
+                            // Point? fixPoint;
+                            // var prov =
+                            //     ref.read(centerPositionProvider.notifier);
+                            List<double> mapCenter = [];
+                            mapCenter.add(double.parse(
+                                deliveryInfo.mapCenter.split(',').first));
+                            mapCenter.add(double.parse(
+                                deliveryInfo.mapCenter.split(',').last));
+                            await _controller.moveCamera(
+                                CameraUpdate.newCameraPosition(CameraPosition(
+                                    target: Point(
+                                        longitude: mapCenter[1],
+                                        latitude: mapCenter[0] - 0.4),
+                                    zoom: 8)));
                           },
-                          child: Container(
-                            padding: EdgeInsets.all(11),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: SvgPicture.asset(
-                              AppIcons.map,
-                              color: AppAllColors.lightAccent,
-                              width: 22.r,
-                              height: 22.r,
-                            ),
-                          ),
+                          onMapTap: _onMapTap,
                         ),
-                        10.h.heightBox,
-                        Container(
-                          constraints: BoxConstraints(
-                            maxHeight: MediaQuery.of(context).size.height * 0.5,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: ListView(
-                            padding: EdgeInsets.all(20),
-                            shrinkWrap: true,
-                            children: [
-                              AppTextField(
-                                key: priceKey,
-                                title: "Стоимость заказа",
-                                minLength: 1,
-                                text: orderPrice.toString(),
-                                isVisibleText: false,
-                              ),
-                              12.h.heightBox,
-                              AppTextField(
-                                key: addressKey,
-                                title: "Адрес",
-                                minLength: 1,
-                                text: address,
-                                readOnly: true,
-                                isVisibleText: false,
-                              ),
-                              12.h.heightBox,
-                              Row(
-                                children: [
-                                  DatePickerWidget(
-                                    onUpdate: (dt) {
-                                      deliveryDateTime =
-                                          deliveryDateTime.copyWith(
-                                            year: dt.year,
-                                            month: dt.month,
-                                            day: dt.day,
-                                          );
-                                    },
-                                    isRowPickers: true,
-                                  ),
-                                  18.w.widthBox,
-                                  DatePickerWidget(
-                                    onUpdate: (dt) {
-                                      deliveryDateTime =
-                                          deliveryDateTime.copyWith(
-                                            hour: dt.hour,
-                                            minute: dt.minute,
-                                          );
-                                    },
-                                    isTimePicker: true,
-                                    isRowPickers: true,
-                                  ),
-                                ],
-                              ),
-                              12.h.heightBox,
-                              Row(
-                                children: [
-                                  Text(
-                                    'Стоимость доставки составит',
-                                    style: AppTextStyles.textMediumBold,
-                                  ),
-                                  const Spacer(),
-                                  Text(
-                                    '${calcDelivery.calc(
-                                      ZonesDelivery.zone1,
-                                      DeliveryParam(
-                                        price: orderPrice,
-                                        extractTime: false,
-                                        timeRange:
-                                        getTimeRangeData(ZonesDelivery.zone1),
-                                      ),
-                                    )}₽',
-                                    style: AppTextStyles.textMediumBold
-                                        .copyWith(color: AppColors.primary),
-                                  ),
-                                ],
-                              ),
-                              12.h.heightBox,
-                              AppButton(
-                                tap: () {
-                                  AppUi.showAppBottomSheet(
-                                    child: FractionallySizedBox(
-                                      heightFactor: 0.94,
-                                      child: MoreAboutDelivery(
-                                        deliveryInfo: deliveryInfo,
+                      ),
+                      Positioned(
+                        left: 10.w,
+                        right: 10.w,
+                        bottom: 22.h,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            GestureDetector(
+                              onTap: () async {
+                                if (!(await locationPermissionGranted)) {
+                                  AppUi.showToast(
+                                      context, "Не выдано разрешение");
+                                  return;
+                                }
+
+                                setState(() => _isLoading = true);
+
+                                final _userPosition =
+                                    await _controller.getUserCameraPosition();
+
+                                setState(() => _isLoading = false);
+
+                                if (_userPosition != null) {
+                                  await _controller.moveCamera(
+                                    CameraUpdate.newCameraPosition(
+                                      CameraPosition(
+                                        target: _userPosition.target,
                                       ),
                                     ),
-                                    context: context,
                                   );
-                                },
-                                title: 'Узнать подробнее о доставке',
-                                withGreenBorder: true,
+                                }
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(11),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: SvgPicture.asset(
+                                  AppIcons.map,
+                                  color: AppAllColors.lightAccent,
+                                  width: 22.r,
+                                  height: 22.r,
+                                ),
                               ),
-                            ],
-                          ),
+                            ),
+                            10.h.heightBox,
+                            Container(
+                              constraints: BoxConstraints(
+                                maxHeight:
+                                    MediaQuery.of(context).size.height * 0.5,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: ListView(
+                                padding: EdgeInsets.all(20),
+                                shrinkWrap: true,
+                                children: [
+                                  AppTextField(
+                                    key: priceKey,
+                                    title: "Стоимость заказа",
+                                    minLength: 1,
+                                    text: orderPrice.text,
+                                    controller: orderPrice,
+                                  ),
+                                  12.h.heightBox,
+                                  AddressSuggestionWidget(
+                                    key: addressKey,
+                                    address: 'Санкт-Петербург',
+                                    onSelected: (data) async {
+                                      final point = Point(
+                                        latitude: data.pos.latitude,
+                                        longitude: data.pos.longitude,
+                                      );
+
+                                      await _controller.moveCamera(
+                                        CameraUpdate.newCameraPosition(
+                                          CameraPosition(target: point),
+                                        ),
+                                      );
+
+                                      await _appUserPoint(point);
+                                    },
+                                  ),
+                                  12.h.heightBox,
+                                  Row(
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsets.only(bottom: 8.0.h),
+                                            child: Text(
+                                              'Дата доставки',
+                                              textAlign: TextAlign.start,
+                                              style: AppTextStyles.textField,
+                                            ),
+                                          ),
+                                          DatePickerWidget(
+                                            onUpdate: (dt) {
+                                              deliveryDateTime =
+                                                  deliveryDateTime.copyWith(
+                                                year: dt.year,
+                                                month: dt.month,
+                                                day: dt.day,
+                                              );
+                                            },
+                                            isRowPickers: true,
+                                          ),
+                                        ],
+                                      ),
+                                      18.w.widthBox,
+                                      Column(
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsets.only(bottom: 8.0.h),
+                                            child: Text(
+                                              'Дата доставки',
+                                              textAlign: TextAlign.start,
+                                              style: AppTextStyles.textField,
+                                            ),
+                                          ),
+                                          DatePickerWidget(
+                                            onUpdate: (dt) {
+                                              currentHour = double.parse(
+                                                  dt.hour.toString() +
+                                                      '.' +
+                                                      dt.minute.toString());
+                                            },
+                                            isTimePicker: true,
+                                            isRowPickers: true,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  12.h.heightBox,
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Стоимость доставки составит',
+                                        style: AppTextStyles.textMediumBold,
+                                      ),
+                                      const Spacer(),
+                                      Text(
+                                        '${zonesDelivery == ZonesDelivery.none || getTimeRangeData(
+                                              zonesDelivery,
+                                            ) == null ? 0 : calcDelivery.calcDelivery(
+                                              zonesDelivery,
+                                              DeliveryParam(
+                                                price: double.parse(
+                                                        orderPrice.text)
+                                                    .toInt(),
+                                                extractTime: false,
+                                                timeRange: getTimeRangeData(
+                                                  zonesDelivery,
+                                                ),
+                                              ),
+                                            ) ?? 0} ₽',
+                                        style: AppTextStyles.textMediumBold
+                                            .copyWith(color: AppColors.primary),
+                                      ),
+                                    ],
+                                  ),
+                                  12.h.heightBox,
+                                  AppButton(
+                                    tap: () {
+                                      AppUi.showAppBottomSheet(
+                                        child: FractionallySizedBox(
+                                          heightFactor: 0.95,
+                                          child: MoreAboutDelivery(
+                                            deliveryInfo: deliveryInfo,
+                                          ),
+                                        ),
+                                        context: context,
+                                      );
+                                    },
+                                    title: 'Узнать подробнее о доставке',
+                                    withGreenBorder: true,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            );
-          }
-          );
+                );
+              });
           return body ?? Container();
         }),
       ),
@@ -298,27 +340,50 @@ class _DeliveryCalculationScreenState
 
   PlacemarkMapObject? _userPlaceMark;
 
+  Future<void> _appUserPoint(Point point) async {
+    zonesDelivery = await calcDelivery.getZone(
+      LatLng(point.latitude, point.longitude),
+    );
+    setState(() {
+      if (_userPlaceMark != null) {
+        mapObjects.remove(_userPlaceMark!);
+      }
+      _userPlaceMark = PlacemarkMapObject(
+          opacity: 1.0,
+          icon: PlacemarkIcon.single(
+            PlacemarkIconStyle(
+              image: BitmapDescriptor.fromAssetImage(AppIcons.userPoint),
+              scale: AppUi.placeMarkScale,
+            ),
+          ),
+          point: point,
+          mapId: MapObjectId(point.latitude.toString()));
+      mapObjects.add(_userPlaceMark!);
+    });
+  }
+
   void _onMapTap(Point point) async {
+    calcDelivery.distanceFromZone1(
+      LatLng(point.latitude, point.longitude),
+    );
     try {
       setState(() {
         _isLoading = true;
       });
       var pStr = '${point.longitude},${point.latitude}';
 
-      address =
-          await ref.read(yandexGeocoderApiProvider).getAddressFromPoint(pStr) ??
-              '';
+      var address =
+          await ref.read(yandexGeocoderApiProvider).getAddressFromPoint(pStr);
 
       await _appUserPoint(point);
 
-      if (addressKey.currentState is SetAddressMixin && address.isNotEmpty) {
+      if (addressKey.currentState is SetAddressMixin && address != null) {
         var data = AddressFullData(
           MapPosition(latitude: point.latitude, longitude: point.longitude),
           address,
           "",
         );
         (addressKey.currentState as SetAddressMixin).initAddressValue(data);
-        print(address);
       }
     } finally {
       setState(() {
@@ -327,43 +392,37 @@ class _DeliveryCalculationScreenState
     }
   }
 
-  Future<void> _appUserPoint(Point point) async {
-    setState(() {
-      if (_userPlaceMark != null) {
-        mapObjects.remove(_userPlaceMark!);
-      }
-      _userPlaceMark = PlacemarkMapObject(
-          opacity: 1.0,
-          icon: PlacemarkIcon.single(PlacemarkIconStyle(
-            image: BitmapDescriptor.fromAssetImage(AppIcons.userPoint),
-            scale: AppUi.placeMarkScale,
-          )),
-          point: point,
-          mapId: MapObjectId(point.latitude.toString()));
-      setState(() {
-        mapObjects.add(_userPlaceMark!);
-      });
-    });
-  }
-
-  TimeRangeData getTimeRangeData(ZonesDelivery zoneDelivery) {
+  TimeRangeData? getTimeRangeData(ZonesDelivery zoneDelivery) {
     int zone = zoneDelivery == ZonesDelivery.zone1
         ? 1
         : zoneDelivery == ZonesDelivery.zone2
             ? 2
             : 3;
-    double currentHour = deliveryDateTime.hour.toDouble();
-    if (deliveryDateTime.minute > 0) {
-      currentHour += 0.5;
-    }
-    return deliveryInfo.timeRanges.timeRangesDefault
+    List<TimeRangeData> tmd = deliveryInfo.timeRanges.timeRangesDefault
         .where(
           (element) =>
               element.zone == zone &&
               currentHour > element.startHour.toDouble() &&
               currentHour <= element.stopHour.toDouble(),
         )
-        .toList()
-        .first;
+        .toList();
+    if (tmd.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Выбранное время доставки недоступно')),
+        );
+      });
+      return null;
+    } else {
+      return deliveryInfo.timeRanges.timeRangesDefault
+          .where(
+            (element) =>
+                element.zone == zone &&
+                currentHour > element.startHour.toDouble() &&
+                currentHour <= element.stopHour.toDouble(),
+          )
+          .toList()
+          .first;
+    }
   }
 }

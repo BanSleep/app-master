@@ -426,12 +426,12 @@ class _PersonalAreaPageState extends ConsumerState<PersonalAreaPage> {
                   child: Column(
                     children: <Widget>[
                       ProfileNavigationButton(
-                          title: AppRes.delivery,
+                          title: 'Калькулятор доставки',
                           function: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => DeliveryCalculationScreen(address: 'Санкт-Петербург')
+                                builder: (context) => DeliveryCalculationScreen()
                               ),
                             );
                           }),

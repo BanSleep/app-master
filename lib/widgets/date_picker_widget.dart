@@ -126,14 +126,17 @@ class _DatePickerWidgetState extends State<DatePickerWidget>
               minute: DateTime.now().minute,
             ),
             builder: (context, child) {
+              return MediaQuery(
+                data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+                child: pickerTheme(child),
+              );
               return pickerTheme(child);
             },
           );
 
-          if (picked != null &&
-              picked.hour != _selectedDate.hour &&
-              picked.minute != _selectedDate.minute) {
+          if (picked != null) {
             setState(() {
+              picked.format(context);
               _selectedDate = DateTime(_selectedDate.year, _selectedDate.month,
                   _selectedDate.day, picked.hour, picked.minute);
               if (widget.onUpdate != null) {
@@ -187,7 +190,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget>
             SizedBox.shrink(),
             Text(
               widget.isTimePicker
-                  ? DateFormat('hh:mm').format(_selectedDate)
+                  ? DateFormat('HH:mm').format(_selectedDate)
                   : formattedDate.format(_selectedDate),
               style: AppTextStyles.textDateTime,
             ),

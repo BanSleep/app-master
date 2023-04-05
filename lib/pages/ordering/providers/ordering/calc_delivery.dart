@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:collection/collection.dart';
 import 'package:cvetovik/core/ui/app_ui.dart';
 import 'package:cvetovik/models/api/response/region/delivery_info_response.dart';
@@ -305,5 +307,21 @@ class CalcDelivery with AddressMixin {
       return result;
     }
     return false;
+  }
+
+  int? calcDelivery(ZonesDelivery zone, DeliveryParam p) {
+    var km = getDistanceKm();
+
+    log(km.toString(), name: 'getDistanceKm');
+
+    if (zone == ZonesDelivery.none){
+      return 0;
+    }
+    else {
+      if (p.timeRange!.freeFrom != 0 && p.timeRange!.freeFrom <= p.price){
+        return 0;
+      }
+      return p.timeRange!.price + p.timeRange!.kmPrice * km;
+    }
   }
 }

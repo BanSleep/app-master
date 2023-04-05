@@ -22,7 +22,7 @@ class AppTextField extends StatefulWidget {
   final Function? onChange;
   final String? text;
   final bool? readOnly;
-  final bool isVisibleText;
+  final TextEditingController? controller;
 
   const AppTextField({
     Key? key,
@@ -35,7 +35,7 @@ class AppTextField extends StatefulWidget {
     this.onChange,
     this.text,
     this.readOnly,
-    this.isVisibleText = true,
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -124,8 +124,8 @@ class _AppTextFieldState extends State<AppTextField> with GetStrMixin {
           ],
           child: TextFormField(
             readOnly: widget.readOnly == true,
-            style: widget.isVisibleText ? AppTextStyles.textField : AppTextStyles.textDateTime.copyWith(fontSize: 12.r),
-            controller: _controller,
+            style: AppTextStyles.textField,
+            controller: widget.controller ?? _controller,
             maxLines: widget.maxLines,
             inputFormatters: (widget.textFieldType == TextFieldType.phone)
                 ? [_phoneFormatter]
