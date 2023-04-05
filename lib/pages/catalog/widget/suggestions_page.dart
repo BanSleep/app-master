@@ -4,6 +4,7 @@ import 'package:cvetovik/core/ui/app_text_styles.dart';
 import 'package:cvetovik/models/api/response/order/dadata_response.dart';
 import 'package:cvetovik/models/api/response/suggestions_response.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SuggestionsPage extends StatefulWidget {
   final List<SuggestionsData>? model;
@@ -25,12 +26,12 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 15, right: 15),
+      padding: EdgeInsets.only(left: 15.w, right: 15.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 30,
+            height: 30.h,
           ),
           Text(
             AppRes.mostPopular,
@@ -46,7 +47,7 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
                         : widget.suggestions![index]);
                   },
                   child: Container(
-                    margin: EdgeInsets.only(bottom: 12),
+                    margin: EdgeInsets.only(bottom: 20.h),
                     child: Row(
                       children: [
                         // if (widget.isSearch) ...[
@@ -88,7 +89,7 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
               itemCount: widget.model != null
                   ? widget.model!.length
                   : widget.suggestions!.length,
-              padding: EdgeInsets.only(top: 20),
+              padding: EdgeInsets.only(top: 20.h),
             ),
           )
         ],
