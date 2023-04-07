@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:cvetovik/models/api/response/region/delivery_info_response.dart';
 
 class DeliveryInfoParse {
-
   List<String> parseZonesDeliveryInformation(List<TimeRangeData> timeRanges) {
     List<String> resultStrings = [];
 
@@ -23,14 +22,16 @@ class DeliveryInfoParse {
       if (price != oldPrice || kmPrice != kmOldPrice) {
         stopHour = timeRanges[i - 1].stopHour;
         priceMap.add({
-          '$oldPriceруб.${kmOldPrice > 0 ? ' + $kmOldPriceруб. за каждый километр от зоны доставки №1' : ''}': [startHour, stopHour]
+          '$oldPriceруб.${kmOldPrice > 0 ? ' + $kmOldPriceруб. за каждый километр от зоны доставки №1' : ''}':
+              [startHour, stopHour]
         });
         freeFromIndex.add(timeRanges[i - 1].freeFrom);
         startHour = timeRanges[i].startHour;
       }
       if (i == timeRanges.length - 1) {
         priceMap.add({
-          '$priceруб.${kmPrice > 0 ? ' + ${kmPrice}руб. за каждый километр от зоны доставки №1' : ''}': [startHour, timeRanges[i].stopHour]
+          '$priceруб.${kmPrice > 0 ? ' + ${kmPrice}руб. за каждый километр от зоны доставки №1' : ''}':
+              [startHour, timeRanges[i].stopHour]
         });
         freeFromIndex.add(timeRanges[i].freeFrom);
       }
@@ -38,9 +39,10 @@ class DeliveryInfoParse {
       kmOldPrice = kmPrice;
     }
 
-    if (priceMap.first.keys.first == priceMap.last.keys.first && priceMap.length > 2){
-      //priceMap.first[priceMap.first.keys.first]
-      priceMap.first[priceMap.first.keys.first]!.first = priceMap.last[priceMap.first.keys.first]!.first;
+    if (priceMap.first.keys.first == priceMap.last.keys.first &&
+        priceMap.length > 2) {
+      priceMap.first[priceMap.first.keys.first]!.first =
+          priceMap.last[priceMap.first.keys.first]!.first;
       priceMap.removeLast();
     }
 
@@ -90,10 +92,10 @@ class DeliveryInfoParse {
       if (timesOfDay[0] == timesOfDay[1]) {
         timesOfDay.removeLast();
       }
-      if (priceMap[i][key]!.last == priceMap[i][key]!.first){
+      if (priceMap[i][key]!.last == priceMap[i][key]!.first) {
         timesOfDay = ['любое'];
       }
-      if (timesOfDay.last == 'ночное' && priceMap[i][key]!.last == 0){
+      if (timesOfDay.last == 'ночное' && priceMap[i][key]!.last == 0) {
         timesOfDay.removeLast();
       }
 
@@ -112,10 +114,9 @@ class DeliveryInfoParse {
           str += timesOfDay[idx] + ', ';
         }
       }
-      if (startHour == stopHour){
+      if (startHour == stopHour) {
         str = str + ' время суток - $price';
-      }
-      else{
+      } else {
         str = str + ' время суток с $startHour до $stopHour - $price';
       }
 
@@ -139,9 +140,7 @@ class DeliveryInfoParse {
       return 'вечернее';
     } else if (hour >= 0 && hour < 6) {
       return 'ночное';
-    } else{
-      log(hour.toString());
-      return '';
     }
+    return '';
   }
 }
