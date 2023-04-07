@@ -24,9 +24,9 @@ void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) async {
     // Sentry.captureMessage('appStart');
-    // if (Platform.isAndroid) {
-    //   await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
-    // }
+    if (Platform.isAndroid) {
+      await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
+    }
     await SentryFlutter.init(
       (options) {
         options.dsn =

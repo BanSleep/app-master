@@ -27,10 +27,10 @@ class PaymentPage extends ConsumerStatefulWidget {
 class _PaymentPageState extends ConsumerState<PaymentPage> {
   @override
   Widget build(BuildContext context) {
-    //final String startUrl = 'https://app.cvetovik.com/cloudpayments.html';
-    //var str = widget.paymentWidget; //.replaceAll('\n', '');
-    //var str ="<!DOCTYPE html>   <html>    <body>    <h1>My First Heading</h1>    <p>My first paragraph.</p>    </body>    </html>";
-    //var uriFromStr = Uri.dataFromString(str);
+    // final String startUrl = 'https://app.cvetovik.com/cloudpayments.html';
+    // var str = widget.paymentWidget; //.replaceAll('\n', '');
+    // var str ="<!DOCTYPE html>   <html>    <body>    <h1>My First Heading</h1>    <p>My first paragraph.</p>    </body>    </html>";
+    // var uriFromStr = Uri.dataFromString(str);
 
     var orderId = ref.read(orderingBlocProvider).orderId;
     var set = ref.read(settingsProvider);
