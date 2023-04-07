@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:cvetovik/core/ui/app_ui.dart';
@@ -130,9 +131,7 @@ class CalcDelivery with AddressMixin {
         endIndex = middleIndex;
       }
 
-      //int startNewIndex = 0;
       for (var i = startIndex; i <= endIndex; i++) {
-        print('***** --- $i');
         if (i < 0) {
           break;
         }
@@ -146,14 +145,6 @@ class CalcDelivery with AddressMixin {
         }
       }
 
-      /*List<Point> geometryWayPath = [];
-      if (startNewIndex > 0) {
-        for (var i = startNewIndex; i <= currRoute.geometry.length - 1; i++) {
-          var curr = currRoute.geometry[i];
-          geometryWayPath.add(curr);
-        }
-      }*/
-
       if (zoneOneEndPoint != null) {
         List<RequestPoint> points = [];
         points.add(
@@ -161,12 +152,6 @@ class CalcDelivery with AddressMixin {
               point: zoneOneEndPoint,
               requestPointType: RequestPointType.wayPoint),
         );
-
-        /*geometryWayPath.forEach((el) {
-          var point = RequestPoint(
-              point: el, requestPointType: RequestPointType.viaPoint);
-          points.add(point);
-        });*/
 
         points.add(
           RequestPoint(
@@ -176,18 +161,7 @@ class CalcDelivery with AddressMixin {
         );
 
         resultWithSession = YandexDriving.requestRoutes(
-            drivingOptions: DrivingOptions(),
-            points:
-                points /*[
-          RequestPoint(
-              point: zoneOneEndPoint,
-              requestPointType: RequestPointType.wayPoint),
-          RequestPoint(
-              point: Point(
-                  latitude: currPoint.latitude, longitude: currPoint.longitude),
-              requestPointType: RequestPointType.wayPoint),
-        ]*/
-            );
+            drivingOptions: DrivingOptions(), points: points);
         result = await resultWithSession.result;
         if (result.routes != null && result.routes!.isNotEmpty) {
           currRoute = result.routes!.reduce((current, next) =>
@@ -199,6 +173,7 @@ class CalcDelivery with AddressMixin {
           var raw = currRoute.metadata.weight.distance.value;
           if (raw != null) {
             int distance = raw.floor();
+            print(distance);
             return distance;
           }
         }
@@ -211,6 +186,7 @@ class CalcDelivery with AddressMixin {
     var zoneKey = _getZoneKeyByDate();
     var currZones = deliveryInfo.zones![zoneKey];
     var zone = await _getZoneFromCurr(currZones, currPoint);
+
     return zone;
   }
 
@@ -227,6 +203,7 @@ class CalcDelivery with AddressMixin {
 
   int? get distance => _distance;
   int? _distance;
+
   Future<ZonesDelivery> _getZoneFromCurr(
       ZoneData? currZones, LatLng currPoint) async {
     var rawPoints = currZones!.zone1;
@@ -273,7 +250,6 @@ class CalcDelivery with AddressMixin {
     var last = rawList[rawList.length - 1];
     last = last.replaceAll(']', '');
     rawList[rawList.length - 1] = last;
-    print(rawList.length);
     var pointList = rawList.map((e) => _strToLatLng(e)).toList();
     return pointList;
   }
@@ -309,19 +285,76 @@ class CalcDelivery with AddressMixin {
     return false;
   }
 
-  int? calcDelivery(ZonesDelivery zone, DeliveryParam p) {
+  int? calcDelivery(ZonesDelivery zone, DeliveryParam p, LatLng currPoint,
+      DeliveryInfo info, double currentHour) {
     var km = getDistanceKm();
-
-    log(km.toString(), name: 'getDistanceKm');
-
-    if (zone == ZonesDelivery.none){
-      return 0;
+    print('zone: ${zone}');
+    if (zone == ZonesDelivery.zone3) {
+      double dist = getDistanceFromFirstZone(
+        parseStringToList(info.zones!['default']!.zone1!),
+        currPoint,
+      );
+      int res = 350 + (dist.toInt() * 35);
+      return res;
     }
-    else {
-      if (p.timeRange!.freeFrom != 0 && p.timeRange!.freeFrom <= p.price){
+
+    if (zone == ZonesDelivery.none) {
+      return 0;
+    } else {
+      if (p.timeRange!.freeFrom != 0 && p.timeRange!.freeFrom <= p.price) {
         return 0;
       }
+      // if (zone == ZonesDelivery.zone1 && (currentHour >= 20 || currentHour <= 9)) {
+      //   return 350;
+      // }
       return p.timeRange!.price + p.timeRange!.kmPrice * km;
     }
+  }
+
+  double getDistanceFromFirstZone(List<List<double>> zone1, LatLng currPoint) {
+    double min = 12222;
+    int selected = 0;
+    List<double> firstRadian = [];
+    List<double> secondRadian = [];
+    for (int i = 0; i < zone1.length; i++) {
+      if (getLong(LatLng(zone1[i][0], zone1[i][1]), currPoint) < min) {
+        min = getLong(LatLng(zone1[i][0], zone1[i][1]), currPoint);
+        selected = i;
+      }
+    }
+    firstRadian = [(zone1[selected][0] * (pi/180)), (zone1[selected][1] * (pi/180))];
+    secondRadian = [(currPoint.latitude * (pi/180)), (currPoint.longitude * (pi/180))];
+    double cl1 = cos(firstRadian[0]);
+    double cl2 = cos(firstRadian[1]);
+    double sl1 = cos(secondRadian[0]);
+    double sl2 = cos(secondRadian[1]);
+    double delta = secondRadian[1] - firstRadian[1];
+    double cosinDelta = cos(delta);
+    double sinDelta = sin(delta);
+    double y = sqrt(pow(cl2 * sinDelta, 2) + pow(cl1 * sl2 - sl1 * cl2 * cosinDelta, 2));
+    double x = sl1 * sl2 + cl1 * cl2 * cosinDelta;
+    double ad = atan2(y, x);
+    double dist = ad * 6372.795;
+    print(dist);
+    return dist;
+  }
+
+  List<List<double>> parseStringToList(String input) {
+    List<List<double>> result = [];
+
+    RegExp exp = RegExp(r"\[([\d\.]+),([\d\.]+)\]");
+    Iterable<RegExpMatch> matches = exp.allMatches(input);
+    for (RegExpMatch match in matches) {
+      double lat = double.parse(match.group(1)!);
+      double lon = double.parse(match.group(2)!);
+      result.add([lat, lon]);
+    }
+
+    return result;
+  }
+
+  double getLong(LatLng firstPoint, LatLng secondPoint) {
+    double res = sqrt((pow((secondPoint.latitude - firstPoint.latitude), 2) + pow((secondPoint.longitude - firstPoint.longitude), 2)));
+    return res;
   }
 }

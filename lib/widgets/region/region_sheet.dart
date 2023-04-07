@@ -119,12 +119,12 @@ class _RegionSheetState extends ConsumerState<RegionSheet> {
       setState(() {
         selectedRegion = item;
       });
-      ref.read(deliveryInfoProvider.notifier).init();
       ref.read(repositoryInfoProvider).init();
 
       await ref
           .read(currentRegionProvider.notifier)
           .saveRegion(selectedRegion.id, selectedRegion.title);
+      ref.read(deliveryInfoProvider.notifier).getDeliveryInfo();
     }
   }
 

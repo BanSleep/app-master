@@ -65,22 +65,13 @@ class _DeliveryCalculationScreenState
   String address = '';
   ZonesDelivery zonesDelivery = ZonesDelivery.none;
   List<TimeRangeData> ranges = [];
+  LatLng currPoint = LatLng(0, 0);
   double currentHour = double.parse(
       DateTime.now().hour.toString() + '.' + DateTime.now().minute.toString());
 
   @override
   void initState() {
-    // for (int i = 0; i < 2; i++) {
-    //   mapObjects.add(PolygonMapObject(mapId: MapObjectId('points$i'), polygon: Polygon(
-    //     outerRing: LinearRing(points: [
-    //       for (int j = 0; j < widget.deliveryInfo.zones![0]!.zone1!.length; j++) ...[
-    //         Point(latitude: widget.deliveryInfo.zones![0]!.zone1![j][0], longitude: longitude)
-    //       ]
-    //     ]),
-    //   )));
-    // }
-    // print(widget.deliveryInfo.zones!['default']!);
-    // print(double.tryParse(widget.deliveryInfo.zones!['default']!.zone1![0][0]));
+
     super.initState();
   }
 
@@ -96,7 +87,6 @@ class _DeliveryCalculationScreenState
         extendBodyBehindAppBar: true,
         body: Consumer(builder: (context, WidgetRef ref, Widget? child) {
           Widget? body;
-
           final stateDeliveryInfo = ref.watch(deliveryInfoProvider);
           stateDeliveryInfo.maybeWhen(
               orElse: () {
@@ -246,6 +236,7 @@ class _DeliveryCalculationScreenState
                                                 year: dt.year,
                                                 month: dt.month,
                                                 day: dt.day,
+
                                               );
                                             },
                                             isRowPickers: true,
@@ -270,6 +261,8 @@ class _DeliveryCalculationScreenState
                                                   dt.hour.toString() +
                                                       '.' +
                                                       dt.minute.toString());
+                                              _onMapTap(Point(latitude: currPoint.latitude, longitude: currPoint.longitude));
+
                                             },
                                             isTimePicker: true,
                                             isRowPickers: true,
@@ -300,6 +293,9 @@ class _DeliveryCalculationScreenState
                                                   zonesDelivery,
                                                 ),
                                               ),
+                                          currPoint,
+                                          deliveryInfo,
+                                          currentHour,
                                             ) ?? 0} ₽',
                                         style: AppTextStyles.textMediumBold
                                             .copyWith(color: AppColors.primary),
@@ -344,6 +340,9 @@ class _DeliveryCalculationScreenState
     zonesDelivery = await calcDelivery.getZone(
       LatLng(point.latitude, point.longitude),
     );
+    if (zonesDelivery == ZonesDelivery.zone2 && (currentHour >= 21 || currentHour <= 9)) {
+      zonesDelivery = ZonesDelivery.zone3;
+    }
     setState(() {
       if (_userPlaceMark != null) {
         mapObjects.remove(_userPlaceMark!);
@@ -363,6 +362,9 @@ class _DeliveryCalculationScreenState
   }
 
   void _onMapTap(Point point) async {
+    setState(() {
+      currPoint = LatLng(point.latitude, point.longitude);
+    });
     calcDelivery.distanceFromZone1(
       LatLng(point.latitude, point.longitude),
     );

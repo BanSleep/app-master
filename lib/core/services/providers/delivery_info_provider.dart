@@ -54,4 +54,7 @@ class DeliveryInfoRepository extends StateNotifier<DeliveryState> with SortDataM
     return null;
   }
 
+  setInit() {
+    state = DeliveryState.initializing();
+  }
 }
