@@ -23,7 +23,7 @@ void main() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) async {
-    // Sentry.captureMessage('appStart');
+    Sentry.captureMessage('appStart');
     if (Platform.isAndroid) {
       await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
     }
@@ -71,6 +71,4 @@ void main() async {
       ),
     );
   });
-
-
 }

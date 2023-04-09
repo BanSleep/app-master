@@ -116,7 +116,7 @@ class _MoreAboutDeliveryState extends State<MoreAboutDelivery> {
                 ),
                 12.h.heightBox,
                 SizedBox(
-                  height: 152.h,
+                  height: 161.w,
                   child: ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
@@ -147,7 +147,7 @@ class _MoreAboutDeliveryState extends State<MoreAboutDelivery> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            12.h.heightBox,
+                            10.h.heightBox,
                             Text(
                               index == 0
                                   ? 'Общие положения'
@@ -157,7 +157,7 @@ class _MoreAboutDeliveryState extends State<MoreAboutDelivery> {
                                     index != 0 ? zonesColor[index - 1] : null,
                               ),
                             ),
-                            12.h.heightBox,
+                            10.h.heightBox,
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -173,6 +173,7 @@ class _MoreAboutDeliveryState extends State<MoreAboutDelivery> {
                                         : ' - ' + deliveryInformation[0],
                                     style: AppTextStyles.descriptionMedium
                                         .copyWith(
+                                      fontSize: 9.5.sp,
                                       color: index != 0
                                           ? zonesColor[index - 1]
                                           : null,
@@ -181,7 +182,7 @@ class _MoreAboutDeliveryState extends State<MoreAboutDelivery> {
                                 ),
                               ],
                             ),
-                            12.h.heightBox,
+                            10.h.heightBox,
                             if (deliveryInformation.length > 1 || index == 0)
                               Row(
                                 children: [
@@ -200,6 +201,7 @@ class _MoreAboutDeliveryState extends State<MoreAboutDelivery> {
                                           : ' - ' + deliveryInformation[1],
                                       style: AppTextStyles.descriptionMedium
                                           .copyWith(
+                                        fontSize: 9.5.sp,
                                         color: index != 0
                                             ? zonesColor[index - 1]
                                             : null,
@@ -208,7 +210,7 @@ class _MoreAboutDeliveryState extends State<MoreAboutDelivery> {
                                   ),
                                 ],
                               ),
-                            12.h.heightBox,
+                            10.h.heightBox,
                             if (deliveryInformation.length > 2)
                               Row(
                                 children: [
@@ -225,6 +227,7 @@ class _MoreAboutDeliveryState extends State<MoreAboutDelivery> {
                                       ' - ' + deliveryInformation[2],
                                       style: AppTextStyles.descriptionMedium
                                           .copyWith(
+                                        fontSize: 9.5.sp,
                                         color: index != 0
                                             ? zonesColor[index - 1]
                                             : null,

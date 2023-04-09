@@ -47,7 +47,7 @@ class _InformationContainerState extends State<InformationContainer> {
   Widget build(BuildContext context) {
     return Container(
       //duration: Duration(milliseconds: 500),
-      padding: EdgeInsets.all(24.w),
+      padding: EdgeInsets.only(top: 24.w, bottom: 24.w, left: 24.w, right: 12.w),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -74,19 +74,24 @@ class _InformationContainerState extends State<InformationContainer> {
                 width: 215.w,
                 child: Text(
                   subtitles[widget.index],
-                  style: AppTextStyles.descriptionMedium
-                      .copyWith(color: AppAllColors.lightBlack),
+                  style: AppTextStyles.descriptionMedium.copyWith(
+                      color: AppAllColors.lightBlack, fontSize: 10.sp),
                 ),
               ),
               const Spacer(),
               GestureDetector(
-                child: SvgPicture.asset(AppIcons.arrow_down),
+                behavior: HitTestBehavior.translucent,
+                child: SizedBox(
+                  height: 35.w,
+                  width: 35.w,
+                  child: SvgPicture.asset(AppIcons.arrow_down, fit: BoxFit.none,),
+                ),
                 onTap: () {
                   setState(() {
                     isOpen = !isOpen;
                   });
                 },
-              ),
+              ).paddingOnly(bottom: 15.h),
             ],
           ),
           if (isOpen)
@@ -95,7 +100,7 @@ class _InformationContainerState extends State<InformationContainer> {
               child: Text(
                 text[widget.index],
                 style: AppTextStyles.descriptionMedium
-                    .copyWith(color: AppAllColors.lightBlack),
+                    .copyWith(color: AppAllColors.lightBlack, fontSize: 10.sp),
               ),
             ),
         ],
