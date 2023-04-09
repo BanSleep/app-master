@@ -26,6 +26,7 @@ import 'package:cvetovik/widgets/share/app_text_field.dart';
 import 'package:cvetovik/widgets/share/value_mixin.dart';
 import 'package:cvetovik/widgets/state/loading_widget.dart';
 import 'package:cvetovik/widgets/state/not_data_widget.dart';
+import 'package:cvetovik/widgets/time/time_interval_courier_widget.dart';
 import 'package:cvetovik/widgets/time/time_select_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -66,8 +67,11 @@ class _DeliveryCalculationScreenState
   ZonesDelivery zonesDelivery = ZonesDelivery.none;
   List<TimeRangeData> ranges = [];
   LatLng currPoint = LatLng(0, 0);
+  List<String> items = [];
+  String selectedValue = '';
   double currentHour = double.parse(
       DateTime.now().hour.toString() + '.' + DateTime.now().minute.toString());
+  // List<List<TimeRangeData>> listOfRanges = [];
 
   @override
   void initState() {
@@ -99,6 +103,14 @@ class _DeliveryCalculationScreenState
               loaded: (data) {
                 deliveryInfo = data;
                 ranges = deliveryInfo.timeRanges.timeRangesDefault;
+                if (items.isEmpty) {
+                  for (int i = 6; i < 23; i++) {
+                    items.add('${i}:00 - ${i + 2}:00');
+                  }
+                }
+                if (selectedValue.isEmpty) {
+                  selectedValue = items[0];
+                }
                 calcDelivery = CalcDelivery(deliveryInfo);
                 body = LoadingOverlay(
                   isLoading: _isLoading,
@@ -255,18 +267,75 @@ class _DeliveryCalculationScreenState
                                               style: AppTextStyles.textField,
                                             ),
                                           ),
-                                          DatePickerWidget(
-                                            onUpdate: (dt) {
-                                              currentHour = double.parse(
-                                                  dt.hour.toString() +
-                                                      '.' +
-                                                      dt.minute.toString());
-                                              _onMapTap(Point(latitude: currPoint.latitude, longitude: currPoint.longitude));
-
-                                            },
-                                            isTimePicker: true,
-                                            isRowPickers: true,
+                                          SizedBox(
+                                            height: 38.h,
+                                            width: 128.w,
+                                            child: DecoratedBox(
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(6.r),
+                                                border: Border.all(
+                                                  color: AppAllColors.lightGrey,
+                                                  width: 1,
+                                                ),
+                                                color: AppAllColors.lightGrey,
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.only(left: 12),
+                                                child: DropdownButton<String>(
+                                                  value: selectedValue,
+                                                  //elevation: 16,
+                                                  icon: Column(mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      Padding(
+                                                        padding: EdgeInsets.only(right: 10.w),
+                                                        child: SvgPicture.asset(
+                                                          AppIcons.time,
+                                                          height: 18.h,
+                                                          width: 18.w,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  isDense: false,
+                                                  isExpanded: true,
+                                                  style: AppTextStyles.textDateTime,
+                                                  underline: Container(
+                                                    height: 0,
+                                                    color: Colors.deepPurpleAccent,
+                                                  ),
+                                                  onChanged: (newValue) {
+                                                    setState(() {
+                                                      selectedValue = newValue.toString();
+                                                      currentHour = double.parse(
+                                                                  selectedValue.split(':').first);
+                                                              _onMapTap(Point(latitude: currPoint.latitude, longitude: currPoint.longitude));
+                                                    });
+                                                  },
+                                                  items: items.map<DropdownMenuItem<String>>((String value) {
+                                                    return DropdownMenuItem<String>(
+                                                      value: value,
+                                                      child: Text(
+                                                        value,
+                                                        style: AppTextStyles.textDateTime,
+                                                      ),
+                                                    );
+                                                  }).toList(),
+                                                ),
+                                              ),
+                                            ),
                                           ),
+                                          // DatePickerWidget(
+                                          //   onUpdate: (dt) {
+                                          //     currentHour = double.parse(
+                                          //         dt.hour.toString() +
+                                          //             '.' +
+                                          //             dt.minute.toString());
+                                          //     _onMapTap(Point(latitude: currPoint.latitude, longitude: currPoint.longitude));
+                                          //
+                                          //   },
+                                          //   isTimePicker: true,
+                                          //   isRowPickers: true,
+                                          // ),
                                         ],
                                       ),
                                     ],
