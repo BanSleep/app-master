@@ -104,9 +104,14 @@ class _DeliveryCalculationScreenState
                 deliveryInfo = data;
                 ranges = deliveryInfo.timeRanges.timeRangesDefault;
                 if (items.isEmpty) {
-                  for (int i = 6; i < 23; i++) {
-                    items.add('${i}:00 - ${i + 2}:00');
+                  for (int i = 0; i < ranges.length; i++) {
+                    if (ranges[i].zone == 1) {
+                      items.add('${ranges[i].startHour}:00 - ${ranges[i]
+                          .stopHour}:00');
+                    }
                   }
+                  items = items.toSet().toList();
+                  // items.sort();
                 }
                 if (selectedValue.isEmpty) {
                   selectedValue = items[0];
@@ -223,6 +228,7 @@ class _DeliveryCalculationScreenState
                                           CameraPosition(target: point),
                                         ),
                                       );
+                                      _onMapTap(point);
 
                                       await _appUserPoint(point);
                                     },
@@ -262,7 +268,7 @@ class _DeliveryCalculationScreenState
                                             padding:
                                                 EdgeInsets.only(bottom: 8.0.h),
                                             child: Text(
-                                              'Дата доставки',
+                                              'Время доставки',
                                               textAlign: TextAlign.start,
                                               style: AppTextStyles.textField,
                                             ),
@@ -324,18 +330,6 @@ class _DeliveryCalculationScreenState
                                               ),
                                             ),
                                           ),
-                                          // DatePickerWidget(
-                                          //   onUpdate: (dt) {
-                                          //     currentHour = double.parse(
-                                          //         dt.hour.toString() +
-                                          //             '.' +
-                                          //             dt.minute.toString());
-                                          //     _onMapTap(Point(latitude: currPoint.latitude, longitude: currPoint.longitude));
-                                          //
-                                          //   },
-                                          //   isTimePicker: true,
-                                          //   isRowPickers: true,
-                                          // ),
                                         ],
                                       ),
                                     ],
