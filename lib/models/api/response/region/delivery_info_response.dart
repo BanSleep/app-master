@@ -45,6 +45,7 @@ class DeliveryInfo {
     required this.exactTimePrice,
     required this.mapCenter,
     this.zones,
+    this.exactStopDate,
     required this.timeRanges,
   });
 
@@ -54,6 +55,7 @@ class DeliveryInfo {
   int exactTimePrice;
   String mapCenter;
   Map<String, ZoneData>? zones;
+  String? exactStopDate;
   TimeRanges timeRanges;
 
   factory DeliveryInfo.fromJson(Map<String, dynamic> json) {
@@ -64,6 +66,7 @@ class DeliveryInfo {
         selfMinSum: json["self_min_sum"],
         deliveryMinSum: json["delivery_min_sum"],
         exactTimePrice: json["exact_time_price"],
+        exactStopDate: json["exact_stop_date"],
         mapCenter: json["map_center"],
         zones: Map.from(json["zones"])
             .map((k, v) => MapEntry<String, ZoneData>(k, ZoneData.fromJson(v))),

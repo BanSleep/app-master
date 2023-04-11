@@ -31,6 +31,7 @@ import 'package:cvetovik/widgets/time/time_select_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:maps_toolkit/maps_toolkit.dart';
 import 'package:tuple/tuple.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
@@ -67,6 +68,7 @@ class _OrderingCourierWidgetState extends ConsumerState<OrderingCourierWidget>
   final keyDate = GlobalKey();
   final keyTime = GlobalKey();
   bool _showRecipient = true;
+  DateTime deliveryDate = DateTime.now();
 
   List<TimeRangeData> timeRanges = [];
   late Point currPos;
@@ -249,6 +251,7 @@ class _OrderingCourierWidgetState extends ConsumerState<OrderingCourierWidget>
                           setState(() => zone = newZone),
                       blocRef: ref,
                       zone: zone,
+                      showExtractTime: DateFormat('dd.MM.yyyy').parse(widget.deliveryInfo.exactStopDate!).isAfter(deliveryDate),
                     ),
                   ],
                 ),
@@ -380,6 +383,10 @@ class _OrderingCourierWidgetState extends ConsumerState<OrderingCourierWidget>
       (keyTime.currentState as SetTimeRangeSelfGetMixin)
           .initTimeRangeValueWithDt(dt);
     }
+
+    setState(() {
+      deliveryDate = dt;
+    });
 
     // var tr = ref.read(orderingBlocProvider).getTimeRanges(dt);
     // widget.timeRanges = tr;

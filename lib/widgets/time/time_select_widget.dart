@@ -19,6 +19,7 @@ class TimeSelectWidget extends StatefulWidget {
   final Function(bool value)? onUpdatedExactTime;
   final WidgetRef blocRef;
   final ZonesDelivery zone;
+  final bool showExtractTime;
 
   const TimeSelectWidget({
     Key? key,
@@ -28,6 +29,7 @@ class TimeSelectWidget extends StatefulWidget {
     this.onUpdatedZone,
     required this.blocRef,
     required this.zone,
+    required this.showExtractTime,
   }) : super(key: key);
 
   @override
@@ -50,7 +52,7 @@ class _TimeSelectWidgetState extends State<TimeSelectWidget>
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Visibility(
-              visible: showExtractTime,
+              visible: widget.showExtractTime,
               child: CheckBoxWidget(
                 title: AppRes.extractTime,
                 smallSize: true,
