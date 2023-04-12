@@ -128,6 +128,7 @@ class _DeliveryCalculationScreenState
                           onMapCreated: (yandexMapController) async {
                             _controller = yandexMapController;
 
+                            await _controller.toggleUserLayer(visible: true);
                             // Point? fixPoint;
                             // var prov =
                             //     ref.read(centerPositionProvider.notifier);
@@ -160,19 +161,17 @@ class _DeliveryCalculationScreenState
                                       context, "Не выдано разрешение");
                                   return;
                                 }
-
                                 setState(() => _isLoading = true);
-
                                 final _userPosition =
                                     await _controller.getUserCameraPosition();
-
+                                log(_userPosition!.target.toString());
                                 setState(() => _isLoading = false);
 
                                 if (_userPosition != null) {
                                   await _controller.moveCamera(
                                     CameraUpdate.newCameraPosition(
                                       CameraPosition(
-                                        target: _userPosition.target,
+                                        target: Point(latitude: _userPosition.target.latitude - 0.004, longitude: _userPosition.target.longitude),
                                       ),
                                     ),
                                   );
