@@ -123,7 +123,7 @@ class _AddressSuggestionWidgetState
           },
           onSuggestionSelected: (value) async {
             if (value != null && value is Suggestion) {
-              _controller.text = value.unrestrictedValue;
+              _controller.text = value.value;
               if (widget.onSelected != null &&
                   value.data.geoLat != null &&
                   value.data.geoLat != null) {
@@ -162,7 +162,6 @@ class _AddressSuggestionWidgetState
 
   @override
   void initAddressValue(AddressFullData data) {
-    _controller.text = data.address;
     _position = data.pos;
   }
 }
