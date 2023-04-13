@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'dart:convert';
@@ -105,7 +106,7 @@ class _DeliveryCalculationScreenState
                 ranges = deliveryInfo.timeRanges.timeRangesDefault;
                 if (items.isEmpty) {
                   for (int i = 0; i < ranges.length; i++) {
-                    if (ranges[i].zone == 1) {
+                    if (ranges[i].zone == (zonesDelivery == ZonesDelivery.zone1 ? 1 : zonesDelivery == ZonesDelivery.zone2 ? 2 : 3)) {
                       items.add('${ranges[i].startHour}:00 - ${ranges[i]
                           .stopHour}:00');
                     }
@@ -313,7 +314,7 @@ class _DeliveryCalculationScreenState
                                                       selectedValue = newValue.toString();
                                                       currentHour = double.parse(
                                                                   selectedValue.split(':').first);
-                                                              _onMapTap(Point(latitude: currPoint.latitude, longitude: currPoint.longitude));
+                                                              _onMapTap(Point(latitude: currPoint.latitude, longitude: currPoint.longitude), true);
                                                     });
                                                   },
                                                   items: items.map<DropdownMenuItem<String>>((String value) {
@@ -409,6 +410,20 @@ class _DeliveryCalculationScreenState
       if (_userPlaceMark != null) {
         mapObjects.remove(_userPlaceMark!);
       }
+      if (items.isEmpty) {
+        print('YA TUT');
+        for (int i = 0; i < ranges.length; i++) {
+          if (ranges[i].zone ==
+              (zonesDelivery == ZonesDelivery.zone1 ? 1 : zonesDelivery ==
+                  ZonesDelivery.zone2 ? 2 : 3)) {
+            items.add('${ranges[i].startHour}:00 - ${ranges[i]
+                .stopHour}:00');
+          }
+        }
+        items = items.toSet().toList();
+        selectedValue = items[0];
+      }
+      print(items);
       _userPlaceMark = PlacemarkMapObject(
           opacity: 1.0,
           icon: PlacemarkIcon.single(
@@ -423,7 +438,7 @@ class _DeliveryCalculationScreenState
     });
   }
 
-  void _onMapTap(Point point) async {
+  void _onMapTap(Point point, [bool isFromRanges = false]) async {
     setState(() {
       currPoint = LatLng(point.latitude, point.longitude);
     });
@@ -438,6 +453,8 @@ class _DeliveryCalculationScreenState
 
       var address =
           await ref.read(yandexGeocoderApiProvider).getAddressFromPoint(pStr);
+
+      isFromRanges ? null : items = [];
 
       await _appUserPoint(point);
 
@@ -455,6 +472,7 @@ class _DeliveryCalculationScreenState
       });
     }
   }
+
 
   TimeRangeData? getTimeRangeData(ZonesDelivery zoneDelivery) {
     int zone = zoneDelivery == ZonesDelivery.zone1
