@@ -466,8 +466,7 @@ class _DeliveryCalculationScreenState
         .where(
           (element) =>
               element.zone == zone &&
-              currentHour > element.startHour.toDouble() &&
-              currentHour <= element.stopHour.toDouble(),
+              currentHour == element.startHour.toDouble(),
         )
         .toList();
     if (tmd.isEmpty) {
@@ -480,10 +479,10 @@ class _DeliveryCalculationScreenState
     } else {
       return deliveryInfo.timeRanges.timeRangesDefault
           .where(
-            (element) =>
-                element.zone == zone &&
-                currentHour > element.startHour.toDouble() &&
-                currentHour <= element.stopHour.toDouble(),
+            (element) {
+              return element.zone == zone &&
+                  currentHour == element.startHour.toDouble();
+            },
           )
           .toList()
           .first;

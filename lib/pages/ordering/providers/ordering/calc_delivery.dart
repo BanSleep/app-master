@@ -288,7 +288,7 @@ class CalcDelivery with AddressMixin {
   int? calcDelivery(ZonesDelivery zone, DeliveryParam p, LatLng currPoint,
       DeliveryInfo info, double currentHour) {
     var km = getDistanceKm();
-    print('zone: ${zone}');
+    print('timerange: ${p.timeRange!.startHour}\nprice: ${p.price}');
     if (zone == ZonesDelivery.zone3) {
       double dist = getDistanceFromFirstZone(
         parseStringToList(info.zones!['default']!.zone1!),
