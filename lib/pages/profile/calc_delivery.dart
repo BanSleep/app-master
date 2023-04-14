@@ -260,9 +260,11 @@ class _DeliveryCalculationScreenState
                                             isRowPickers: true,
                                           ),
                                         ],
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                       ),
                                       18.w.widthBox,
                                       Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Padding(
                                             padding:
@@ -275,7 +277,7 @@ class _DeliveryCalculationScreenState
                                           ),
                                           SizedBox(
                                             height: 38.h,
-                                            width: 128.w,
+                                            width: 126.w,
                                             child: DecoratedBox(
                                               decoration: BoxDecoration(
                                                 borderRadius: BorderRadius.circular(6.r),
@@ -403,6 +405,7 @@ class _DeliveryCalculationScreenState
     zonesDelivery = await calcDelivery.getZone(
       LatLng(point.latitude, point.longitude),
     );
+    log(zonesDelivery.toString(), name: 'KAK VI MENIA ZAEBALY SO SVOIM CVETOHNIKOM');
     if (zonesDelivery == ZonesDelivery.zone2 && (currentHour >= 21 || currentHour <= 9)) {
       zonesDelivery = ZonesDelivery.zone3;
     }
