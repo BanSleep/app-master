@@ -15,20 +15,21 @@ class AppStartupPage extends ConsumerWidget {
     final state = ref.watch(appStartupModelProvider);
     bool isDark = ref.watch(appThemeStateProvider);
     return state.when(
-        initializing: () => TemplatePage(body: LoadingWidget()),
-        loaded: () {
-          return HomeTabNavigator(isDark: isDark);
-        },
-        error: (String? text) {
-          return TemplatePage(
-            body: AppErrorWidget(
-              text: text,
-              tryAgain: () async {
-                var model = ref.read(appStartupModelProvider.notifier);
-                await model.init();
-              },
-            ),
-          );
-        });
+      initializing: () => TemplatePage(body: LoadingWidget()),
+      loaded: () {
+        return HomeTabNavigator(isDark: isDark);
+      },
+      error: (String? text) {
+        return TemplatePage(
+          body: AppErrorWidget(
+            text: text,
+            tryAgain: () async {
+              var model = ref.read(appStartupModelProvider.notifier);
+              await model.init();
+            },
+          ),
+        );
+      },
+    );
   }
 }

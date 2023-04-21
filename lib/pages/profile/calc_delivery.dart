@@ -71,12 +71,12 @@ class _DeliveryCalculationScreenState
   List<String> items = [];
   String selectedValue = '';
   double currentHour = double.parse(
-      DateTime.now().hour.toString() + '.' + DateTime.now().minute.toString());
+      DateTime.now().hour.toString());
+
   // List<List<TimeRangeData>> listOfRanges = [];
 
   @override
   void initState() {
-
     super.initState();
   }
 
@@ -106,9 +106,14 @@ class _DeliveryCalculationScreenState
                 ranges = deliveryInfo.timeRanges.timeRangesDefault;
                 if (items.isEmpty) {
                   for (int i = 0; i < ranges.length; i++) {
-                    if (ranges[i].zone == (zonesDelivery == ZonesDelivery.zone1 ? 1 : zonesDelivery == ZonesDelivery.zone2 ? 2 : 3)) {
-                      items.add('${ranges[i].startHour}:00 - ${ranges[i]
-                          .stopHour}:00');
+                    int currentZoneIndex = zonesDelivery == ZonesDelivery.zone1
+                        ? 1
+                        : zonesDelivery == ZonesDelivery.zone2
+                            ? 2
+                            : 3;
+                    if (ranges[i].zone == currentZoneIndex) {
+                      items.add(
+                          '${ranges[i].startHour}:00 - ${ranges[i].stopHour}:00'); //todo init for zone3
                     }
                   }
                   items = items.toSet().toList();
@@ -172,7 +177,12 @@ class _DeliveryCalculationScreenState
                                   await _controller.moveCamera(
                                     CameraUpdate.newCameraPosition(
                                       CameraPosition(
-                                        target: Point(latitude: _userPosition.target.latitude - 0.004, longitude: _userPosition.target.longitude),
+                                        target: Point(
+                                            latitude:
+                                                _userPosition.target.latitude -
+                                                    0.004,
+                                            longitude:
+                                                _userPosition.target.longitude),
                                       ),
                                     ),
                                   );
@@ -254,17 +264,18 @@ class _DeliveryCalculationScreenState
                                                 year: dt.year,
                                                 month: dt.month,
                                                 day: dt.day,
-
                                               );
                                             },
                                             isRowPickers: true,
                                           ),
                                         ],
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                       ),
                                       18.w.widthBox,
                                       Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Padding(
                                             padding:
@@ -280,7 +291,8 @@ class _DeliveryCalculationScreenState
                                             width: 126.w,
                                             child: DecoratedBox(
                                               decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(6.r),
+                                                borderRadius:
+                                                    BorderRadius.circular(6.r),
                                                 border: Border.all(
                                                   color: AppAllColors.lightGrey,
                                                   width: 1,
@@ -288,14 +300,20 @@ class _DeliveryCalculationScreenState
                                                 color: AppAllColors.lightGrey,
                                               ),
                                               child: Padding(
-                                                padding: EdgeInsets.only(left: 12),
+                                                padding:
+                                                    EdgeInsets.only(left: 12),
                                                 child: DropdownButton<String>(
                                                   value: selectedValue,
                                                   //elevation: 16,
-                                                  icon: Column(mainAxisAlignment: MainAxisAlignment.center,
+                                                  icon: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
                                                     children: [
                                                       Padding(
-                                                        padding: EdgeInsets.only(right: 10.w),
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                right: 10.w),
                                                         child: SvgPicture.asset(
                                                           AppIcons.time,
                                                           height: 18.h,
@@ -306,25 +324,43 @@ class _DeliveryCalculationScreenState
                                                   ),
                                                   isDense: false,
                                                   isExpanded: true,
-                                                  style: AppTextStyles.textDateTime,
+                                                  style: AppTextStyles
+                                                      .textDateTime,
                                                   underline: Container(
                                                     height: 0,
-                                                    color: Colors.deepPurpleAccent,
+                                                    color:
+                                                        Colors.deepPurpleAccent,
                                                   ),
                                                   onChanged: (newValue) {
                                                     setState(() {
-                                                      selectedValue = newValue.toString();
-                                                      currentHour = double.parse(
-                                                                  selectedValue.split(':').first);
-                                                              _onMapTap(Point(latitude: currPoint.latitude, longitude: currPoint.longitude), true);
+                                                      selectedValue =
+                                                          newValue.toString();
+                                                      currentHour =
+                                                          double.parse(
+                                                              selectedValue
+                                                                  .split(':')
+                                                                  .first);
+                                                      _onMapTap(
+                                                          Point(
+                                                              latitude:
+                                                                  currPoint
+                                                                      .latitude,
+                                                              longitude: currPoint
+                                                                  .longitude),
+                                                          true);
                                                     });
                                                   },
-                                                  items: items.map<DropdownMenuItem<String>>((String value) {
-                                                    return DropdownMenuItem<String>(
+                                                  items: items.map<
+                                                          DropdownMenuItem<
+                                                              String>>(
+                                                      (String value) {
+                                                    return DropdownMenuItem<
+                                                        String>(
                                                       value: value,
                                                       child: Text(
                                                         value,
-                                                        style: AppTextStyles.textDateTime,
+                                                        style: AppTextStyles
+                                                            .textDateTime,
                                                       ),
                                                     );
                                                   }).toList(),
@@ -345,9 +381,7 @@ class _DeliveryCalculationScreenState
                                       ),
                                       const Spacer(),
                                       Text(
-                                        '${zonesDelivery == ZonesDelivery.none || getTimeRangeData(
-                                              zonesDelivery,
-                                            ) == null ? 0 : calcDelivery.calcDelivery(
+                                        '${calcDelivery.calcDelivery(
                                               zonesDelivery,
                                               DeliveryParam(
                                                 price: double.parse(
@@ -358,9 +392,9 @@ class _DeliveryCalculationScreenState
                                                   zonesDelivery,
                                                 ),
                                               ),
-                                          currPoint,
-                                          deliveryInfo,
-                                          currentHour,
+                                              currPoint,
+                                              deliveryInfo,
+                                              currentHour,
                                             ) ?? 0} ₽',
                                         style: AppTextStyles.textMediumBold
                                             .copyWith(color: AppColors.primary),
@@ -405,28 +439,29 @@ class _DeliveryCalculationScreenState
     zonesDelivery = await calcDelivery.getZone(
       LatLng(point.latitude, point.longitude),
     );
-    log(zonesDelivery.toString(), name: 'KAK VI MENIA ZAEBALY SO SVOIM CVETOHNIKOM');
-    if (zonesDelivery == ZonesDelivery.zone2 && (currentHour >= 21 || currentHour <= 9)) {
-      zonesDelivery = ZonesDelivery.zone3;
-    }
     setState(() {
       if (_userPlaceMark != null) {
         mapObjects.remove(_userPlaceMark!);
       }
-      if (items.isEmpty) {
-        print('YA TUT');
-        for (int i = 0; i < ranges.length; i++) {
-          if (ranges[i].zone ==
-              (zonesDelivery == ZonesDelivery.zone1 ? 1 : zonesDelivery ==
-                  ZonesDelivery.zone2 ? 2 : 3)) {
-            items.add('${ranges[i].startHour}:00 - ${ranges[i]
-                .stopHour}:00');
-          }
-        }
-        items = items.toSet().toList();
-        selectedValue = items[0];
+      int currentZoneIndex = 3;
+      if (zonesDelivery == ZonesDelivery.zone1) {
+        currentZoneIndex = 1;
       }
-      print(items);
+      if (zonesDelivery == ZonesDelivery.zone2) {
+        currentZoneIndex = 2;
+      }
+      List<TimeRangeData> currentZoneRanges =
+          ranges.where((element) => element.zone == currentZoneIndex).toList();
+      for (int i = 0; i < currentZoneRanges.length; i++) {
+        if (i == 0){
+          currentHour = currentZoneRanges[i].startHour.toDouble();
+        }
+        items.add(
+            '${currentZoneRanges[i].startHour}:00 - ${currentZoneRanges[i].stopHour}:00');
+      }
+      items = items.toSet().toList();
+      selectedValue = items[0];
+      //print(items);
       _userPlaceMark = PlacemarkMapObject(
           opacity: 1.0,
           icon: PlacemarkIcon.single(
@@ -476,32 +511,30 @@ class _DeliveryCalculationScreenState
     }
   }
 
-
   TimeRangeData? getTimeRangeData(ZonesDelivery zoneDelivery) {
-    int zone = zoneDelivery == ZonesDelivery.zone1
-        ? 1
-        : zoneDelivery == ZonesDelivery.zone2
-            ? 2
-            : 3;
+    int currentZoneIndex = 3;
+    if (zonesDelivery == ZonesDelivery.zone1) {
+      currentZoneIndex = 1;
+    }
+    if (zonesDelivery == ZonesDelivery.zone2) {
+      currentZoneIndex = 2;
+    }
+    log(currentZoneIndex.toString(), name: 'currentZoneIndex');
+    log(currentHour.toString(), name: 'currentHour');
     List<TimeRangeData> tmd = deliveryInfo.timeRanges.timeRangesDefault
         .where(
           (element) =>
-              element.zone == zone &&
+              element.zone == currentZoneIndex &&
               currentHour == element.startHour.toDouble(),
         )
         .toList();
     if (tmd.isEmpty) {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Выбранное время доставки недоступно')),
-        );
-      });
       return null;
     } else {
       return deliveryInfo.timeRanges.timeRangesDefault
           .where(
             (element) {
-              return element.zone == zone &&
+              return element.zone == currentZoneIndex &&
                   currentHour == element.startHour.toDouble();
             },
           )
