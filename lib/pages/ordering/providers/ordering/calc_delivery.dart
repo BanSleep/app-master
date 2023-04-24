@@ -292,12 +292,12 @@ class CalcDelivery with AddressMixin {
     }
     var km = getDistanceKm();
     print('timerange: ${p.timeRange!.startHour}\nprice: ${p.price}');
-    if (zone == ZonesDelivery.zone3) {
+    if (p.timeRange!.kmPrice != 0) {
       double dist = getDistanceFromFirstZone(
         parseStringToList(info.zones!['default']!.zone1!),
         currPoint,
       );
-      int res = 350 + (dist.toInt() * 35);
+      int res = 350 + (dist.toInt() * p.timeRange!.kmPrice);
       return res;
     }
 

@@ -119,7 +119,7 @@ class _DeliveryCalculationScreenState
                   items = items.toSet().toList();
                   // items.sort();
                 }
-                if (selectedValue.isEmpty) {
+                if (zonesDelivery == ZonesDelivery.none) {
                   selectedValue = items[0];
                 }
                 calcDelivery = CalcDelivery(deliveryInfo);
@@ -340,14 +340,15 @@ class _DeliveryCalculationScreenState
                                                               selectedValue
                                                                   .split(':')
                                                                   .first);
-                                                      _onMapTap(
-                                                          Point(
-                                                              latitude:
-                                                                  currPoint
-                                                                      .latitude,
-                                                              longitude: currPoint
-                                                                  .longitude),
-                                                          true);
+                                                      calcDelivery.distanceFromZone1(currPoint);
+                                                      // _onMapTap(
+                                                      //     Point(
+                                                      //         latitude:
+                                                      //             currPoint
+                                                      //                 .latitude,
+                                                      //         longitude: currPoint
+                                                      //             .longitude),
+                                                      //     true);
                                                     });
                                                   },
                                                   items: items.map<
@@ -461,6 +462,7 @@ class _DeliveryCalculationScreenState
       }
       items = items.toSet().toList();
       selectedValue = items[0];
+      log('почему тут');
       //print(items);
       _userPlaceMark = PlacemarkMapObject(
           opacity: 1.0,
